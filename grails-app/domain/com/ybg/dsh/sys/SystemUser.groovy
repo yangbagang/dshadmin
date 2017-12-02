@@ -8,8 +8,6 @@ import groovy.transform.ToString
 @ToString(includes='username', includeNames=true, includePackage=false)
 class SystemUser implements Serializable {
 
-    transient springSecurityService
-
     /** 用户名*/
     String username
     String realName
@@ -52,22 +50,6 @@ class SystemUser implements Serializable {
     Set<SystemRole> getAuthorities() {
         SystemUserRole.findAllByUser(this)*.role
     }
-
-    def beforeInsert() {
-        encodePassword()
-    }
-
-    def beforeUpdate() {
-        if (isDirty('password')) {
-            encodePassword()
-        }
-    }
-
-    protected void encodePassword() {
-        password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
-    }
-
-    static transients = ['springSecurityService']
 
     static constraints = {
         username blank: false, unique: true

@@ -10,8 +10,9 @@ class Project {
     String name
     String memo
     Date createTime
-    SystemUser creator
+    SystemUser createUser
     Date updateTime
+    SystemUser updateUser
     Long flowId
     String flowName
     String flowVersion
