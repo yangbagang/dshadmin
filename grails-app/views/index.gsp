@@ -47,7 +47,7 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="${createLink(uri: '/')}"> <asset:image alt="Charisma Logo" src="logo20.png" class="hidden-xs"/>
-            <span>大沙河项目管理系统</span></a>
+            <span>项目管理系统</span></a>
 
         <!-- user dropdown starts -->
         <div class="btn-group pull-right">

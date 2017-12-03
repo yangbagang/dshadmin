@@ -2,7 +2,7 @@ $(document).ready(function () {
     //themes, change CSS with JS
     //default theme(CSS) is cerulean, change it if needed
     var defaultTheme = 'cerulean';
-    var webroot = "/hztadmin/";
+    var webroot = "/dshadmin/";
 
     var currentTheme = $.cookie('currentTheme') == null ? defaultTheme : $.cookie('currentTheme');
     var msie = navigator.userAgent.match(/msie/i);

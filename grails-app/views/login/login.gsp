@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>平台管理系统</title>
-    <meta name="description" content="平台管理系统">
+    <title>大沙河项目管理系统</title>
+    <meta name="description" content="大沙河项目管理系统">
     <meta name="author" content="杨拔纲">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The styles -->
@@ -40,7 +40,7 @@
 
         <div class="row">
             <div class="col-md-12 center login-header">
-                <h2>平台管理系统</h2>
+                <h2>大沙河项目管理系统</h2>
             </div>
             <!--/span-->
         </div><!--/row-->
