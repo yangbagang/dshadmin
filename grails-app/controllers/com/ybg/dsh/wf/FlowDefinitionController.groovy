@@ -3,13 +3,13 @@ package com.ybg.dsh.wf
 import com.ybg.dsh.vo.AjaxPagingVo
 import grails.converters.JSON
 
-class WorkTaskController {
+class FlowDefinitionController {
 
     def index() { }
 
     def list() {
-        def data = WorkTask.list(params)
-        def count = WorkTask.count()
+        def data = FlowDefinition.list(params)
+        def count = FlowDefinition.count()
 
         def result = new AjaxPagingVo()
         result.data = data

@@ -4,13 +4,13 @@
             <a href="#">流程管理</a>
         </li>
         <li>
-            <a href="#">节点配置</a>
+            <a href="#">流程设置</a>
         </li>
     </ul>
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 节点配置</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 流程设置</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -55,7 +55,7 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"workTask/list",
+                "url":"flowDefinition/list",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
@@ -65,10 +65,10 @@
             "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
             "columns": [
                 { "title": "名称", "data" : "name", "orderable": true, "searchable": false },
-                { "title": "版本号", "data" : "taskVersion", "orderable": true, "searchable": false },
-                { "title": "更新时间", "data" : "createTime", "orderable": true, "searchable": false },
+                { "title": "版本", "data" : "flowVersion", "orderable": true, "searchable": false },
                 { "title": "状态", "data" : "flag", "orderable": true, "searchable": false },
-                { "title": "下一节点", "data" : "nextId", "orderable": true, "searchable": false },
+                { "title": "更新时间", "data" : "createTime", "orderable": true, "searchable": false },
+                { "title": "后续流程", "data" : "nextId", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
                             '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +

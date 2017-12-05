@@ -4,13 +4,13 @@
             <a href="#">流程管理</a>
         </li>
         <li>
-            <a href="#">节点配置</a>
+            <a href="#">待办任务</a>
         </li>
     </ul>
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 节点配置</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 待办任务</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -41,7 +41,6 @@
         </div>
     </div>
 </div>
-
 <script>
     var gridTable;
     $(document).ready(function(){
@@ -55,20 +54,20 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"workTask/list",
+                "url":"projectTask/list",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
-                    d.name = $("#name").val();
+                    d.taskName = $("#name").val();
                 }
             },
-            "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
+            "order": [[4, 'desc']], // 默认排序(第三列降序, asc升序)
             "columns": [
-                { "title": "名称", "data" : "name", "orderable": true, "searchable": false },
+                { "title": "任务名称", "data" : "taskName", "orderable": true, "searchable": false },
                 { "title": "版本号", "data" : "taskVersion", "orderable": true, "searchable": false },
-                { "title": "更新时间", "data" : "createTime", "orderable": true, "searchable": false },
-                { "title": "状态", "data" : "flag", "orderable": true, "searchable": false },
-                { "title": "下一节点", "data" : "nextId", "orderable": true, "searchable": false },
+                { "title": "状态", "data" : "status", "orderable": true, "searchable": false },
+                { "title": "建创时间", "data" : "createTime", "orderable": true, "searchable": false },
+                { "title": "更新时间", "data" : "updateTime", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
                             '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
@@ -106,21 +105,29 @@
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>新建角色</h3>' +
+                '<h3>新建管理员</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
                 '<div class="form-group">' +
-                '<label for="authority">权限</label>' +
-                '<input type="text" class="form-control" id="authority" name="authority" placeholder="权限英文值,非随意值。">' +
+                '<label for="username">用户名</label>' +
+                '<input type="text" class="form-control" id="username" name="username" placeholder="用户名">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="roleName">角色名</label>' +
-                '<input type="text" class="form-control" id="roleName" name="roleName" placeholder="角色名">' +
+                '<label for="realName">姓名</label>' +
+                '<input type="text" class="form-control" id="realName" name="realName" placeholder="姓名">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="remark">备注</label>' +
-                '<input type="text" class="form-control" id="remark" name="remark" placeholder="备注">' +
+                '<label for="password">密码</label>' +
+                '<input type="password" class="form-control" id="password" name="password" placeholder="密码">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="loginIp">邮箱</label>' +
+                '<input type="email" class="form-control" id="email" name="email" placeholder="邮箱">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="enabled">启用</label>' +
+                '<input type="checkbox" id="enableAccount" name="enableAccount" value="1">' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
@@ -134,47 +141,43 @@
     }
 
     function showInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+        var url = '${createLink(controller: "systemUser", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
             data: "id=" + id,
             success: function (result) {
+                var checkFlag = result.enabled ? 'checked="checked"' : '';
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>角色详情</h3>' +
+                        '<h3>管理员详情</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" readonly="readonly" value="'+result.authority+'">' +
+                        '<label for="username">用户名</label>' +
+                        '<input type="text" class="form-control" id="username" name="username" readonly="readonly" value="'+result.username+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" readonly="readonly" value="'+result.roleName+'">' +
+                        '<label for="realName">姓名</label>' +
+                        '<input type="text" class="form-control" id="realName" name="realName" readonly="readonly" value="'+result.realName+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" readonly="readonly" value="'+result.remark+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="createUser">创建者</label>' +
-                        '<input type="text" class="form-control" id="createUser" name="createUser" readonly="readonly" value="'+result.createUser+'">' +
+                        '<label for="email">邮箱</label>' +
+                        '<input type="email" class="form-control" id="email" name="email" readonly="readonly" value="'+result.email+'">' +
                         '</div>' +
                         '<div class="form-group">' +
                         '<label for="createTime">创建时间</label>' +
                         '<input type="text" class="form-control" id="createTime" name="createTime" readonly="readonly" value="'+result.createTime+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="updateUser">更新者</label>' +
-                        '<input type="text" class="form-control" id="updateUser" name="updateUser" readonly="readonly" value="'+result.updateUser+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="updateTime">更新时间</label>' +
+                        '<label for="updateTime">最后更新时间</label>' +
                         '<input type="text" class="form-control" id="updateTime" name="updateTime" readonly="readonly" value="'+result.updateTime+'">' +
                         '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="enabled">启用</label>' +
+                        '<input type="checkbox" id="enabled" name="enabled" disabled="disabled" ' + checkFlag + '></div>' +
                         '</form>' +
                         '</div>' +
                         '<div class="modal-footer">' +
@@ -191,31 +194,40 @@
     }
 
     function editInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+        var url = '${createLink(controller: "systemUser", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
             data: "id=" + id,
             success: function (result) {
+                var checkFlag = result.enabled ? 'checked="checked"' : '';
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑角色</h3>' +
+                        '<h3>编辑管理员</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" value="'+result.authority+'">' +
+                        '<label for="username">用户名</label>' +
+                        '<input type="text" class="form-control" id="username" name="username" value="'+result.username+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" value="'+result.roleName+'">' +
+                        '<label for="realName">姓名</label>' +
+                        '<input type="text" class="form-control" id="realName" name="realName" value="'+result.realName+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" value="'+result.remark+'">' +
+                        '<label for="email">邮箱</label>' +
+                        '<input type="text" class="form-control" id="email" name="email" value="'+result.email+'">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="password">密码</label>' +
+                        '<input type="password" class="form-control" id="password" name="password" value="'+result.password+'">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="enableAccount">启用</label>' +
+                        '<input type="checkbox" id="enableAccount" name="enableAccount" value="1" ' + checkFlag + '>' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
@@ -252,7 +264,7 @@
     }
 
     function postAjaxRemove(id) {
-        var url = '${createLink(controller: "systemRole", action: "delete")}/' + id;
+        var url = '${createLink(controller: "systemUser", action: "delete")}/' + id;
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -271,7 +283,7 @@
                     content = "" +
                             '<div class="alert alert-danger">' +
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            errorMsg +
+                            JSON.stringify(errorMsg) +
                             '</div>';
                 }
                 $("#myModal").modal('hide');
@@ -292,7 +304,7 @@
     }
 
     function postAjaxForm() {
-        var url = '${createLink(controller: "systemRole", action: "save")}';
+        var url = '${createLink(controller: "systemUser", action: "save")}';
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -302,7 +314,7 @@
                 var isSuccess = result.success;
                 var errorMsg = result.msg;
                 var content = "";
-                if (eval(isSuccess)) {
+                if (isSuccess) {
                     content = "" +
                             '<div class="alert alert-success">' +
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +

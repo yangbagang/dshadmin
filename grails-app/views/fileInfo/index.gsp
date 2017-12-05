@@ -1,16 +1,16 @@
 <div>
     <ul class="breadcrumb">
         <li>
-            <a href="#">系统管理</a>
+            <a href="#">资料管理</a>
         </li>
         <li>
-            <a href="#">系统角色</a>
+            <a href="#">资料管理</a>
         </li>
     </ul>
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 系统角色</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 资料管理</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -24,14 +24,13 @@
 <div class="box-content">
     <form class="form-inline" role="form" action="#">
         <div class="form-group">
-            <label class="control-label" for="name">名称:</label>
+            <label class="control-label" for="name">关键词:</label>
             <input type="text" class="form-control" id="name">
-            <input type="button" class="btn btn-primary" value="查询" id="sercher"/>
+            <input type="button" class="btn btn-primary" value="查询" id="searcher"/>
         </div>
     </form><br />
     <div id="msgInfo" class="box-content alerts"></div>
     <table class="table table-striped table-bordered search_table" id="dataTable"></table>
-</div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -56,22 +55,20 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"systemRole/list",
+                "url":"fileInfo/list",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
-                    d.name = $("#name").val();
+                    d.title = $("#name").val();
                 }
             },
             "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
             "columns": [
-                { "title": "权限", "data" : "authority", "orderable": true, "searchable": false },
-                { "title": "角色名称", "data" : "roleName", "orderable": true, "searchable": false },
-                { "title": "备注", "data" : "remark", "orderable": true, "searchable": false },
-                { "title": "创建者", "data" : "createUser", "orderable": true, "searchable": false },
-                { "title": "创建时间", "data" : "createTime", "orderable": true, "searchable": false },
-                { "title": "更新者", "data" : "updateUser", "orderable": true, "searchable": false },
-                { "title": "更新时间", "data" : "updateTime", "orderable": true, "searchable": false },
+                { "title": "标题", "data" : "title", "orderable": true, "searchable": false },
+                { "title": "类型", "data" : "type", "orderable": true, "searchable": false },
+                { "title": "文件名", "data" : "fileName", "orderable": true, "searchable": false },
+                { "title": "文件大小", "data" : "fileSize", "orderable": true, "searchable": false },
+                { "title": "备注", "data" : "memo", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
                             '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
@@ -99,7 +96,7 @@
         });
         gridTable = table;
         //查询 重新加载
-        $("#sercher").click(function(){
+        $("#searcher").click(function(){
             table.ajax.reload(null, false);
         });
 
