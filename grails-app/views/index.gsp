@@ -115,6 +115,10 @@
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 流程管理</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a class="ajax-link" href="${createLink(uri: '/workFlow')}">流程定义</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition')}">流程设置</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/workTask')}">节点配置</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/projectFlow/listMyTask')}">待办任务</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/projectFlow/listMyTask2')}">己办任务</a></li>
                             </ul>
                         </li>
                         <li class="accordion">
