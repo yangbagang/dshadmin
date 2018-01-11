@@ -11,5 +11,6 @@ class FlowDefinition {
     String flowVersion
     Date createTime
     Short flag = 1 as Short
-    Long nextId
+    String context
+    Long prevId = 0L
 }

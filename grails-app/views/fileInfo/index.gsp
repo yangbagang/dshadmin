@@ -1,16 +1,16 @@
 <div>
     <ul class="breadcrumb">
         <li>
-            <a href="#">资料管理</a>
+            <a href="#">法律法规</a>
         </li>
         <li>
-            <a href="#">资料管理</a>
+            <a href="#">法律法规</a>
         </li>
     </ul>
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 资料管理</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 法律法规</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>

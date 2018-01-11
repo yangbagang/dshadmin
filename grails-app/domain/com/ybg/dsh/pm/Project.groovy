@@ -18,6 +18,6 @@ class Project {
     String flowVersion
     String taskName
     String userName
-    Integer status
+    Integer status = 0//0进行中1己完结2己中止
     Short flag = 1 as Short
 }

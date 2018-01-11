@@ -112,10 +112,17 @@
                         </li>
                         </sec:access>
                         <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-user"></i><span> 法律法规</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a class="ajax-link" href="${createLink(uri: '/fileInfo')}">法律法规</a></li>
+                            </ul>
+                        </li>
+                        <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 流程管理</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a class="ajax-link" href="${createLink(uri: '/workFlow')}">流程定义</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition')}">流程设置</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition/design')}">流程图</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/workTask')}">节点配置</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index1')}">待办任务</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index2')}">己办任务</a></li>
@@ -130,9 +137,9 @@
                             </ul>
                         </li>
                         <li class="accordion">
-                            <a href="#"><i class="glyphicon glyphicon-user"></i><span> 资料管理</span></a>
+                            <a href="#"><i class="glyphicon glyphicon-user"></i><span> 项目资料</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a class="ajax-link" href="${createLink(uri: '/fileInfo')}">资料管理</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/projectTaskData/listFiles')}">项目资料</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -179,7 +186,7 @@
                 <div class="box-content alerts">
                     <div class="alert alert-info">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        欢迎 <strong><sec:loggedInUserInfo field='realName'/></strong> 再次回来。
+                        欢迎 <strong><sec:loggedInUserInfo field='realName'/></strong> 再次回来。再次回来。当前版本定位于体验，相关数据随时会清空。
                     </div>
                 </div>
             </div>
@@ -190,7 +197,7 @@
     <hr>
 
     <footer class="row">
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; 大沙河项目管理系统 2017 </p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; 大沙河项目管理系统 2018 </p>
 
         <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Powered by: <a
                 href="mailto:81667842@qq.com">YBG</a></p>

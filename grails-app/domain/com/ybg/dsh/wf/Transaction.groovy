@@ -1,17 +1,18 @@
 package com.ybg.dsh.wf
 
-class WorkTask {
+class Transaction {
 
     static belongsTo = [flowDefinition: FlowDefinition]
 
     static constraints = {
     }
 
+    String transId
+    String transType
+    String fromId
+    String toId
     String name
-    String taskVersion
-    Date createTime
-    Short flag = 1 as Short
-    String taskId
-    String taskType
+    Integer dash = 0
     Integer marked = 0
+    String condition = ""
 }

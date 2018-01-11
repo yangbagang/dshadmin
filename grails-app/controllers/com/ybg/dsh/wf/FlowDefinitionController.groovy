@@ -21,4 +21,12 @@ class FlowDefinitionController {
         render result as JSON
     }
 
+    def design(Long flowId) {
+
+    }
+
+    def save(Long flowId, String context) {
+
+    }
+
 }

@@ -5,13 +5,13 @@ class ProjectTask {
     static belongsTo = [projectFlow: ProjectFlow]
 
     static constraints = {
+        updateTime nullable: true
     }
 
     String taskName
     String taskVersion
-    Date createTime
+    Date createTime = new Date()
     Date updateTime
     Short status = 1 as Short
-    String taskTemplate
 
 }
