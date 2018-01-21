@@ -14,21 +14,33 @@ class WorkFlowController {
 
     static sdf = new SimpleDateFormat("yyyyMMddHHmmss")
 
+    def workFlowService
+
     def index() {
         //render html for ajax
     }
 
     def list() {
-        def data = WorkFlow.list(params)
-        def count = WorkFlow.count()
+        def c = WorkFlow.createCriteria()
+        def name = params.name ?: ""
+        def data = c.list(params) {
+            and {
+                eq("flag", 1 as Short)
+                or {
+                    ilike("name", "%"+name+"%")
+                    ilike("memo", "%"+name+"%")
+                }
+            }
+            order("createTime", "desc")
+        }
 
         def result = new AjaxPagingVo()
         result.data = data
         result.draw = Integer.valueOf(params.draw)
         result.error = ""
         result.success = true
-        result.recordsTotal = count
-        result.recordsFiltered = count
+        result.recordsTotal = data.totalCount
+        result.recordsFiltered = data.size()
         render result as JSON
     }
 
@@ -36,17 +48,10 @@ class WorkFlowController {
         render workFlow as JSON
     }
 
-    @Transactional
-    def save(WorkFlow workFlow) {
+    def save(Long id, String name, String memo) {
         def result = [:]
-        if (workFlow == null) {
-            result.success = false
-            result.msg = "workFlow is null."
-            render result as JSON
-            return
-        }
 
-        if (StringUtils.isBlank(workFlow.name)) {
+        if (StringUtils.isBlank(name)) {
             result.success = false
             result.msg = "流程名称不能为空。"
             render result as JSON
@@ -54,19 +59,13 @@ class WorkFlowController {
         }
 
         def now = new Date()
-        if (!workFlow.id) {
-            workFlow.createTime = now
-            workFlow.flowVersion = sdf.format(now)
-            workFlow.save flush:true
-        } else {
-            def newWorkFlow = new WorkFlow()
-            newWorkFlow.name = workFlow.name
-            newWorkFlow.createTime = now
-            newWorkFlow.flowVersion = sdf.format(now)
-            newWorkFlow.save flush:true
 
-            workFlow.flag = 0 as Short
-            workFlow.save flush: true
+        //创建新流程
+        workFlowService.create(name, memo, sdf.format(now))
+
+        if (id) {
+            //更新旧流程
+            workFlowService.updateFlag(id, 0 as Short)
         }
 
         result.success = true

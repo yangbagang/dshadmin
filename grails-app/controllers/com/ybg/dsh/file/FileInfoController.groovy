@@ -14,16 +14,24 @@ class FileInfoController {
     }
 
     def list() {
-        def data = FileInfo.list(params)
-        def count = FileInfo.count()
+        def c = FileInfo.createCriteria()
+        def name = params.name ?: ""
+        def data = c.list(params) {
+            or {
+                ilike("title", "%"+name+"%")
+                ilike("memo", "%"+name+"%")
+                ilike("fileName", "%"+name+"%")
+            }
+            order("createTime", "desc")
+        }
 
         def result = new AjaxPagingVo()
         result.data = data
         result.draw = Integer.valueOf(params.draw)
         result.error = ""
         result.success = true
-        result.recordsTotal = count
-        result.recordsFiltered = count
+        result.recordsTotal = data.totalCount
+        result.recordsFiltered = data.size()
         render result as JSON
     }
 

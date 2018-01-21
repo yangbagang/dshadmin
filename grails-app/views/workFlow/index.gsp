@@ -65,13 +65,13 @@
             "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
             "columns": [
                 { "title": "名称", "data" : "name", "orderable": true, "searchable": false },
-                { "title": "版本", "data" : "flowVersion", "orderable": true, "searchable": false },
-                { "title": "状态", "data" : "isDeleted", "orderable": true, "searchable": false },
+                { "title": "备注", "data" : "memo", "orderable": true, "searchable": false },
+                { "title": "状态", "data" : function (data) {
+                        return data.isDeleted == 0 ? "正常" : "己删除";
+                    }, "orderable": false, "searchable": false },
                 { "title": "更新时间", "data" : "createTime", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
-                    return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
-                            '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
+                    return '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
                             '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
                             '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="删除">' +
                             '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
@@ -105,21 +105,17 @@
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>新建角色</h3>' +
+                '<h3>新建流程</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
                 '<div class="form-group">' +
-                '<label for="authority">权限</label>' +
-                '<input type="text" class="form-control" id="authority" name="authority" placeholder="权限英文值,非随意值。">' +
+                '<label for="name">名称</label>' +
+                '<input type="text" class="form-control" id="name" name="name" placeholder="名称">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="roleName">角色名</label>' +
-                '<input type="text" class="form-control" id="roleName" name="roleName" placeholder="角色名">' +
-                '</div>' +
-                '<div class="form-group">' +
-                '<label for="remark">备注</label>' +
-                '<input type="text" class="form-control" id="remark" name="remark" placeholder="备注">' +
+                '<label for="memo">备注</label>' +
+                '<input type="text" class="form-control" id="memo" name="memo" placeholder="备注">' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
@@ -132,65 +128,8 @@
         $('#myModal').modal('show');
     }
 
-    function showInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: "id=" + id,
-            success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>角色详情</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '<form id="infoForm" role="form">' +
-                        '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" readonly="readonly" value="'+result.authority+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" readonly="readonly" value="'+result.roleName+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" readonly="readonly" value="'+result.remark+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="createUser">创建者</label>' +
-                        '<input type="text" class="form-control" id="createUser" name="createUser" readonly="readonly" value="'+result.createUser+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="createTime">创建时间</label>' +
-                        '<input type="text" class="form-control" id="createTime" name="createTime" readonly="readonly" value="'+result.createTime+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="updateUser">更新者</label>' +
-                        '<input type="text" class="form-control" id="updateUser" name="updateUser" readonly="readonly" value="'+result.updateUser+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="updateTime">更新时间</label>' +
-                        '<input type="text" class="form-control" id="updateTime" name="updateTime" readonly="readonly" value="'+result.updateTime+'">' +
-                        '</div>' +
-                        '</form>' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
-            },
-            error: function (data) {
-                showErrorInfo(data.responseText);
-            }
-        });
-    }
-
     function editInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+        var url = '${createLink(controller: "workFlow", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
@@ -199,22 +138,18 @@
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑角色</h3>' +
+                        '<h3>编辑流程</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" value="'+result.authority+'">' +
+                        '<label for="name">名称</label>' +
+                        '<input type="text" class="form-control" id="name" name="name" value="'+result.name+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" value="'+result.roleName+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" value="'+result.remark+'">' +
+                        '<label for="memo">备注</label>' +
+                        '<input type="text" class="form-control" id="memo" name="memo" value="'+result.memo+'">' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
@@ -251,7 +186,7 @@
     }
 
     function postAjaxRemove(id) {
-        var url = '${createLink(controller: "systemRole", action: "delete")}/' + id;
+        var url = '${createLink(controller: "workFlow", action: "delete")}/' + id;
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -291,7 +226,7 @@
     }
 
     function postAjaxForm() {
-        var url = '${createLink(controller: "systemRole", action: "save")}';
+        var url = '${createLink(controller: "workFlow", action: "save")}';
         $.ajax({
             type: "POST",
             dataType: "json",

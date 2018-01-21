@@ -6,6 +6,7 @@ class WorkFlow {
     }
 
     String name
+    String memo
     String flowVersion
     Date createTime
     Short flag = 1 as Short

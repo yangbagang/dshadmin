@@ -124,8 +124,6 @@
                                 <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition')}">流程设置</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition/design')}">流程图</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/workTask')}">节点配置</a></li>
-                                <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index1')}">待办任务</a></li>
-                                <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index2')}">己办任务</a></li>
                             </ul>
                         </li>
                         <li class="accordion">
@@ -134,6 +132,8 @@
                                 <li><a class="ajax-link" href="${createLink(uri: '/project')}">项目管理</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/project')}">进行中项目</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/project')}">己完结项目</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index1')}">待办任务</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index2')}">己办任务</a></li>
                             </ul>
                         </li>
                         <li class="accordion">

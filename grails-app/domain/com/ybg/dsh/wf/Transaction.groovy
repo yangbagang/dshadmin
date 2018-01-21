@@ -14,5 +14,5 @@ class Transaction {
     String name
     Integer dash = 0
     Integer marked = 0
-    String condition = ""
+    String conditions = ""
 }

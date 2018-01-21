@@ -44,6 +44,8 @@
 
 <script>
     var gridTable;
+    var serverPath = 'http://183.57.41.230/FileServer/file/';
+    var fileHasChanged = false;
     $(document).ready(function(){
         var table=$('#dataTable').DataTable({
             "bLengthChange": true,
@@ -59,16 +61,19 @@
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
-                    d.title = $("#name").val();
+                    d.name = $("#name").val();
                 }
             },
-            "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
+            "order": [[1, 'desc']], // 默认排序(第三列降序, asc升序)
             "columns": [
                 { "title": "标题", "data" : "title", "orderable": true, "searchable": false },
-                { "title": "类型", "data" : "type", "orderable": true, "searchable": false },
+                { "title": "添加时间", "data" : "createTime", "orderable": true, "searchable": false },
                 { "title": "文件名", "data" : "fileName", "orderable": true, "searchable": false },
                 { "title": "文件大小", "data" : "fileSize", "orderable": true, "searchable": false },
                 { "title": "备注", "data" : "memo", "orderable": true, "searchable": false },
+                { "title": "下载文件", "data" : function (data) {
+                       return '<a href="'+ serverPath + 'download/'+data.fileId+'">下载</a>';
+                    }, "orderable": false, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
                             '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
@@ -106,35 +111,48 @@
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>新建角色</h3>' +
+                '<h3>添加资料</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
+                '<input type="hidden" id="type" name="type" value="">' +
+                '<input type="hidden" id="fileId" name="fileId" value="">' +
+                '<input type="hidden" id="fileName" name="fileName" value="">' +
+                '<input type="hidden" id="fileSize" name="fileSize" value="0">' +
                 '<div class="form-group">' +
-                '<label for="authority">权限</label>' +
-                '<input type="text" class="form-control" id="authority" name="authority" placeholder="权限英文值,非随意值。">' +
+                '<label for="Filedata">文件</label>' +
+                '<input type="file" class="form-control" id="Filedata" name="Filedata" placeholder="选择文件。" onchange="getFileInfo(this);">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="roleName">角色名</label>' +
-                '<input type="text" class="form-control" id="roleName" name="roleName" placeholder="角色名">' +
+                '<label for="title">标题</label>' +
+                '<input type="text" class="form-control" id="title" name="title" placeholder="标题">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="remark">备注</label>' +
-                '<input type="text" class="form-control" id="remark" name="remark" placeholder="备注">' +
+                '<label for="memo">备注</label>' +
+                '<input type="text" class="form-control" id="memo" name="memo" placeholder="备注">' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
                 '<div class="modal-footer">' +
                 '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                '<a href="javascript:postAjaxForm();" class="btn btn-primary">保存</a>' +
+                '<a href="javascript:postAjaxUpload();" class="btn btn-primary">保存</a>' +
+                '<br><div id="uploadMsg"></div>' +
                 '</div>';
         $("#modal-content").html("");
         $("#modal-content").html(content);
         $('#myModal').modal('show');
     }
 
+    function getFileInfo(obj) {
+        var file = obj.files[0];
+        $("#type").val(file.type);
+        $("#fileName").val(file.name);
+        $("#fileSize").val(file.size);
+        fileHasChanged = true;
+    }
+
     function showInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+        var url = '${createLink(controller: "fileInfo", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
@@ -143,37 +161,37 @@
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>角色详情</h3>' +
+                        '<h3>资料详情</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" readonly="readonly" value="'+result.authority+'">' +
+                        '<label for="title">标题</label>' +
+                        '<input type="text" class="form-control" id="title" name="title" readonly="readonly" value="'+result.title+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" readonly="readonly" value="'+result.roleName+'">' +
+                        '<label for="memo">备注</label>' +
+                        '<input type="text" class="form-control" id="memo" name="memo" readonly="readonly" value="'+result.memo+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" readonly="readonly" value="'+result.remark+'">' +
+                        '<label for="type">类型</label>' +
+                        '<input type="text" class="form-control" id="type" name="type" readonly="readonly" value="'+result.type+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="createUser">创建者</label>' +
-                        '<input type="text" class="form-control" id="createUser" name="createUser" readonly="readonly" value="'+result.createUser+'">' +
+                        '<label for="fileName">文件名</label>' +
+                        '<input type="text" class="form-control" id="fileName" name="fileName" readonly="readonly" value="'+result.fileName+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="createTime">创建时间</label>' +
+                        '<label for="fileSize">文件大小</label>' +
+                        '<input type="text" class="form-control" id="fileSize" name="fileSize" readonly="readonly" value="'+result.fileSize+'">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="createTime">添加时间</label>' +
                         '<input type="text" class="form-control" id="createTime" name="createTime" readonly="readonly" value="'+result.createTime+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="updateUser">更新者</label>' +
-                        '<input type="text" class="form-control" id="updateUser" name="updateUser" readonly="readonly" value="'+result.updateUser+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="updateTime">更新时间</label>' +
-                        '<input type="text" class="form-control" id="updateTime" name="updateTime" readonly="readonly" value="'+result.updateTime+'">' +
+                        '<label for="downloadFile">下载文件</label>' +
+                        '<a id="downloadFile" href="'+ serverPath + 'download/'+result.fileId+'">点此下载</a>' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
@@ -191,7 +209,7 @@
     }
 
     function editInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+        var url = '${createLink(controller: "fileInfo", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
@@ -200,28 +218,33 @@
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑角色</h3>' +
+                        '<h3>编辑资料</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
+                        '<input type="hidden" id="type" name="type" value="' + result.type + '">' +
+                        '<input type="hidden" id="fileId" name="fileId" value="' + result.fileId + '">' +
+                        '<input type="hidden" id="fileName" name="fileName" value="' + result.fileName + '">' +
+                        '<input type="hidden" id="fileSize" name="fileSize" value="' + result.fileSize + '">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" value="'+result.authority+'">' +
+                        '<label for="title">标题</label>' +
+                        '<input type="text" class="form-control" id="title" name="title" value="'+result.title+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" value="'+result.roleName+'">' +
+                        '<label for="memo">备注</label>' +
+                        '<input type="text" class="form-control" id="memo" name="memo" value="'+result.memo+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" value="'+result.remark+'">' +
+                        '<label for="Filedata">文件</label>' +
+                        '<input type="file" class="form-control" id="Filedata" name="Filedata" onchange="getFileInfo(this);">' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '<a href="javascript:postAjaxForm();" class="btn btn-primary">更新</a>' +
+                        '<a href="javascript:postAjaxUpload();" class="btn btn-primary">更新</a>' +
+                        '<br><div id="uploadMsg"></div>' +
                         '</div>';
                 $("#modal-content").html("");
                 $("#modal-content").html(content);
@@ -252,7 +275,7 @@
     }
 
     function postAjaxRemove(id) {
-        var url = '${createLink(controller: "systemRole", action: "delete")}/' + id;
+        var url = '${createLink(controller: "fileInfo", action: "delete")}/' + id;
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -292,7 +315,7 @@
     }
 
     function postAjaxForm() {
-        var url = '${createLink(controller: "systemRole", action: "save")}';
+        var url = '${createLink(controller: "fileInfo", action: "save")}';
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -327,6 +350,38 @@
                         '</div>';
                 $("#msgInfo").html(errorContent);
                 $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
+
+    function postAjaxUpload() {
+        if (!fileHasChanged) {
+            postAjaxForm();
+            return;
+        }
+        $("#uploadMsg").html("文件正在上传，请勿重复点击。");
+        var url = serverPath + 'upload';
+        var data = new FormData();
+        data.append('Filedata', $("#Filedata")[0].files[0]);
+        data.append('folder', 'dsh');
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: url,
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                if (result.status == 200) {
+                    $("#fileId").val(result.fid);
+                    postAjaxForm();
+                } else {
+                    $("#uploadMsg").html(result.message);
+                }
+            },
+            error: function(data) {
+                $("#uploadMsgDiv").html(data.responseText);
             }
         });
     }
