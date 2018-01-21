@@ -122,7 +122,6 @@
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a class="ajax-link" href="${createLink(uri: '/workFlow')}">流程定义</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition')}">流程设置</a></li>
-                                <li><a class="ajax-link" href="${createLink(uri: '/flowDefinition/design')}">流程图</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/workTask')}">节点配置</a></li>
                             </ul>
                         </li>

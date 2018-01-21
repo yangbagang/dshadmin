@@ -62,20 +62,18 @@
                     d.name = $("#name").val();
                 }
             },
-            "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
+            "order": [[3, 'desc']], // 默认排序(第三列降序, asc升序)
             "columns": [
                 { "title": "名称", "data" : "name", "orderable": true, "searchable": false },
-                { "title": "版本", "data" : "flowVersion", "orderable": true, "searchable": false },
-                { "title": "状态", "data" : "flag", "orderable": true, "searchable": false },
+                { "title": "备注", "data" : "memo", "orderable": true, "searchable": false },
+                { "title": "上一流程", "data" : "prevName", "orderable": true, "searchable": false },
                 { "title": "更新时间", "data" : "createTime", "orderable": true, "searchable": false },
-                { "title": "后续流程", "data" : "nextId", "orderable": true, "searchable": false },
+                { "title": "工作流", "data" : "workFlow", "orderable": false, "searchable": false },
                 { "title": "操作", "data" : function (data) {
-                    return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
+                    return '<a class="btn btn-success" href="flowDefinition/design?flowId='+data.id+'" title="设计" target="_blank">' +
                             '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
                             '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
-                            '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="删除">' +
-                            '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
+                            '<i class="glyphicon glyphicon-edit icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
             "language": {
@@ -106,21 +104,29 @@
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>新建角色</h3>' +
+                '<h3>新建流程</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
                 '<div class="form-group">' +
-                '<label for="authority">权限</label>' +
-                '<input type="text" class="form-control" id="authority" name="authority" placeholder="权限英文值,非随意值。">' +
+                '<label for="name">名称</label>' +
+                '<input type="text" class="form-control" id="name" name="name" placeholder="名称">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="roleName">角色名</label>' +
-                '<input type="text" class="form-control" id="roleName" name="roleName" placeholder="角色名">' +
+                '<label for="memo">备注</label>' +
+                '<input type="text" class="form-control" id="memo" name="memo" placeholder="备注">' +
                 '</div>' +
-                '<div class="form-group">' +
-                '<label for="remark">备注</label>' +
-                '<input type="text" class="form-control" id="remark" name="remark" placeholder="备注">' +
+                '<div class="control-group">' +
+                '<label class="control-label" for="workFlowId">工作流</label>' +
+                '<div class="controls">' +
+                '<select id="workFlowId" name="workFlowId" class="form-control" data-rel="chosen"></select>' +
+                '</div>' +
+                '</div>' +
+                '<div class="control-group">' +
+                '<label class="control-label" for="prevId">上一流程</label>' +
+                '<div class="controls">' +
+                '<select id="prevId" name="prevId" class="form-control" data-rel="chosen"></select>' +
+                '</div>' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
@@ -131,67 +137,12 @@
         $("#modal-content").html("");
         $("#modal-content").html(content);
         $('#myModal').modal('show');
-    }
-
-    function showInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: "id=" + id,
-            success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>角色详情</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '<form id="infoForm" role="form">' +
-                        '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" readonly="readonly" value="'+result.authority+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" readonly="readonly" value="'+result.roleName+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" readonly="readonly" value="'+result.remark+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="createUser">创建者</label>' +
-                        '<input type="text" class="form-control" id="createUser" name="createUser" readonly="readonly" value="'+result.createUser+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="createTime">创建时间</label>' +
-                        '<input type="text" class="form-control" id="createTime" name="createTime" readonly="readonly" value="'+result.createTime+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="updateUser">更新者</label>' +
-                        '<input type="text" class="form-control" id="updateUser" name="updateUser" readonly="readonly" value="'+result.updateUser+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="updateTime">更新时间</label>' +
-                        '<input type="text" class="form-control" id="updateTime" name="updateTime" readonly="readonly" value="'+result.updateTime+'">' +
-                        '</div>' +
-                        '</form>' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
-            },
-            error: function (data) {
-                showErrorInfo(data.responseText);
-            }
-        });
+        loadWorkFlowList(0);
+        loadDefinitionList(0);
     }
 
     function editInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+        var url = '${createLink(controller: "flowDefinition", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
@@ -200,22 +151,30 @@
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑角色</h3>' +
+                        '<h3>编辑流程</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" value="'+result.authority+'">' +
+                        '<label for="name">名称</label>' +
+                        '<input type="text" class="form-control" id="name" name="name" value="'+result.name+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" value="'+result.roleName+'">' +
+                        '<label for="memo">备注</label>' +
+                        '<input type="text" class="form-control" id="memo" name="memo" value="'+result.memo+'">' +
                         '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" value="'+result.remark+'">' +
+                        '<div class="control-group">' +
+                        '<label class="control-label" for="workFlowId">工作流</label>' +
+                        '<div class="controls">' +
+                        '<select id="workFlowId" name="workFlowId" class="form-control" data-rel="chosen"></select>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="control-group">' +
+                        '<label class="control-label" for="prevId">上一流程</label>' +
+                        '<div class="controls">' +
+                        '<select id="prevId" name="prevId" class="form-control" data-rel="chosen"></select>' +
+                        '</div>' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
@@ -226,6 +185,8 @@
                 $("#modal-content").html("");
                 $("#modal-content").html(content);
                 $('#myModal').modal('show');
+                loadWorkFlowList(result.workFlowId);
+                loadDefinitionList(result.prevId);
             },
             error: function (data) {
                 showErrorInfo(data.responseText);
@@ -233,66 +194,8 @@
         });
     }
 
-    function removeInfo(id) {
-        var content = "" +
-                '<div class="modal-header">' +
-                '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>提示</h3>' +
-                '</div>' +
-                '<div class="modal-body">' +
-                '<p>删除后信息将无法恢复,是否继续?</p>' +
-                '</div>' +
-                '<div class="modal-footer">' +
-                '<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>' +
-                '<a href="javascript:postAjaxRemove('+id+');" class="btn btn-primary">删除</a>' +
-                '</div>';
-        $("#modal-content").html("");
-        $("#modal-content").html(content);
-        $('#myModal').modal('show');
-    }
-
-    function postAjaxRemove(id) {
-        var url = '${createLink(controller: "systemRole", action: "delete")}/' + id;
-        $.ajax({
-            type: "DELETE",
-            dataType: "json",
-            url: url,
-            success: function (result) {
-                var isSuccess = result.success;
-                var errorMsg = result.msg;
-                var content = "";
-                if (isSuccess) {
-                    content = "" +
-                            '<div class="alert alert-success">' +
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            '删除完成' +
-                            '</div>';
-                } else {
-                    content = "" +
-                            '<div class="alert alert-danger">' +
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            errorMsg +
-                            '</div>';
-                }
-                $("#myModal").modal('hide');
-                gridTable.ajax.reload(null, false);
-                $("#msgInfo").html(content);
-                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
-            },
-            error: function (data) {
-                var errorContent = "" +
-                        '<div class="alert alert-danger">' +
-                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                        data.responseText +
-                        '</div>';
-                $("#msgInfo").html(errorContent);
-                $("#msgInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
-            }
-        });
-    }
-
     function postAjaxForm() {
-        var url = '${createLink(controller: "systemRole", action: "save")}';
+        var url = '${createLink(controller: "flowDefinition", action: "save")}';
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -330,5 +233,63 @@
             }
         });
     }
+    function loadWorkFlowList(workId) {
+        var url = '${createLink(controller: "workFlow", action: "flowList")}';
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: url,
+            data: "",
+            success: function (result) {
+                $("#workFlowId").empty();
+                $.each(result, function (index, item) {
+                    $("#workFlowId").append("<option value='"+item.flowId+"' " +
+                        getSelectedFlag(item.flowId, workId) + ">"+item.flowName+"</option>");
+                });
+            },
+            error: function (data) {
+                var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
+                $("#msgInfo").html(errorContent);
+                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
 
+    function loadDefinitionList(flowId) {
+        var url = '${createLink(controller: "flowDefinition", action: "flowList")}';
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: url,
+            data: "",
+            success: function (result) {
+                $("#prevId").empty();
+                $("#prevId").append("<option value='0'>无</option>");
+                $.each(result, function (index, item) {
+                    $("#prevId").append("<option value='"+item.flowId+"' " +
+                        getSelectedFlag(item.flowId, flowId) + ">"+item.flowName+"</option>");
+                });
+            },
+            error: function (data) {
+                var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
+                $("#msgInfo").html(errorContent);
+                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
+
+    function getSelectedFlag(value1, value2) {
+        if (value1 == value2){
+            return "selected=selected";
+        }
+        return "";
+    }
 </script>

@@ -4,13 +4,13 @@
             <a href="#">流程管理</a>
         </li>
         <li>
-            <a href="#">流程定义</a>
+            <a href="#">工作流</a>
         </li>
     </ul>
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 流程定义</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 工作流</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -105,7 +105,7 @@
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>新建流程</h3>' +
+                '<h3>新建工作流</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
@@ -138,7 +138,7 @@
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑流程</h3>' +
+                        '<h3>编辑工作流</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +

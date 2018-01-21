@@ -91,4 +91,20 @@ class WorkFlowController {
         render result as JSON
     }
 
+    /**
+     * 流程列表，用于下拉选择
+     * @return
+     */
+    def flowList() {
+        def flowList = WorkFlow.findAllByFlagAndIsDeleted(1 as Short, 0 as Short)
+        def result = []
+        flowList.each { flow ->
+            def map = [:]
+            map.flowId = flow.id
+            map.flowName = flow.name
+            result.add(map)
+        }
+        render result as JSON
+    }
+
 }

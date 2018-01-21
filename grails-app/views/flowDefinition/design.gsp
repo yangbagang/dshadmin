@@ -2,14 +2,14 @@
 <html xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>流程图DEMO</title>
+    <title>流程设计 - ${flow.name}</title>
     <!--[if lt IE 9]>
 <?import namespace="v" implementation="#default#VML" ?>
 <![endif]-->
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/css", file: "default.css")}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/fonts", file: "iconflow.css")}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/css", file: "GooFlow.css")}"/>
-    <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/js", file: "data2.js")}"></script>
+    <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "jquery.min.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/js", file: "GooFunc.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "json2.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "printThis.js")}"></script>
@@ -18,6 +18,7 @@
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/js", file: "GooFlow.color.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/js", file: "GooFlow.export.js")}"></script>
     <script type="text/javascript">
+        var flowId = ${flow.id};
         var property={
             toolBtns:["start round mix","end round","task","node","chat","state","plug","join","fork","complex mix"],
             haveHead:true,
@@ -55,43 +56,58 @@
         GooFlow.prototype.remarks.extendBottom="工作区向下扩展";
         var demo;
         $(document).ready(function(){
-            demo=$.createGooFlow($("#demo"),property);
+            demo=$.createGooFlow($("#flowJSON"),property);
             //demo.setNodeRemarks(remark);
-            demo.loadData(jsondata);
+            //demo.loadData(flowContent);
+            loadFlowDefinition();
             //demo.reinitSize(1000,520);
             demo.onItemRightClick=function(id,type){
                 console.log("onItemRightClick: "+id+","+type);
                 return true;//返回false可以阻止浏览器默认的右键菜单事件
-            }
+            };
             demo.onItemDbClick=function(id,type){
                 console.log("onItemDbClick: "+id+","+type);
                 return true;//返回false可以阻止原组件自带的双击直接编辑事件
-            }
-            demo.onPrintClick=function(){
-                demo.print(0.8);
-            }
+            };
+            demo.onFreshClick=function () {
+                loadFlowDefinition();
+            };
             demo.onBtnSaveClick=function () {
-
-            }
+                $("#msg").html("正在保存...");
+                var context = JSON.stringify(demo.exportData());
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "update",
+                    data: "flowId="+ flowId + "&context=" + context,
+                    success: function (result) {
+                        $("#msg").html("设置保存成功");
+                    },
+                    error: function (data) {
+                        $("#msg").html(data.responseText);
+                    }
+                });
+            };
         });
-        var out;
-        function Export(){
-            document.getElementById("result").value=JSON.stringify(demo.exportData());
-        }
-        function ResetScale(){
-            demo.resetScale( parseFloat(document.getElementById("scaleValue").value) );
-        }
         window.onresize=function(){
-            demo.reinitSize(window.innerWidth-15,window.innerHeight-30);
+            flowJSON.reinitSize(window.innerWidth-15,window.innerHeight-30);
+        };
+        function loadFlowDefinition() {
+            demo.loadDataAjax({
+                type: "GET",
+                url: "viewContext?flowId=" + flowId,
+                success: function (result) {
+                    demo.loadData(result)
+                },
+                error: function (data) {
+                    $("#msg").html(data.responseText);
+                }
+            });
         }
     </script>
 </head>
 <body>
-<div id="demo" style="width:100%;height:540px;"></div>
-请输入缩放值：<input type="text" id="scaleValue" value="0.5"/>
-<input id="scale" type="button" value='缩放' onclick="ResetScale()"/>
-<input id="submit1" type="button" value='导出结果' onclick="Export()"/>
-<input id="submit2" type="button" value='清空' onclick="demo.clearData()"/>
-<textarea id="result" row="6"></textarea>
+<div id="flowJSON" style="width:100%;height:540px;"></div>
+<div id="msg"></div>
 </body>
 </html>

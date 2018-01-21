@@ -1,5 +1,6 @@
 package dshadmin
 
+import com.ybg.dsh.objectMarshaller.FlowDefinitionObjectMarshaller
 import com.ybg.dsh.objectMarshaller.SystemUserRoleObjectMarshaller
 import grails.converters.JSON
 
@@ -13,6 +14,7 @@ class BootStrap {
         }
         JSON.registerObjectMarshaller(new SystemUserRoleObjectMarshaller(), 9999)
         systemUserService.initSystemUser()
+        JSON.registerObjectMarshaller(new FlowDefinitionObjectMarshaller(), 9999)
     }
 
     def destroy = {
