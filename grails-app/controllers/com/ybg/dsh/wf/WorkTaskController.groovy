@@ -7,9 +7,10 @@ class WorkTaskController {
 
     def index() { }
 
-    def list() {
-        def data = WorkTask.list(params)
-        def count = WorkTask.count()
+    def list(Long flowId) {
+        def flow = FlowDefinition.get(flowId)
+        def data = WorkTask.findAllByFlowDefinitionAndTaskTypeAndFlag(flow, "task", 1 as Short)
+        def count = data.size()
 
         def result = new AjaxPagingVo()
         result.data = data

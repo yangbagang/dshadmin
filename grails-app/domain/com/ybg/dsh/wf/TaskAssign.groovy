@@ -10,4 +10,5 @@ class TaskAssign {
     }
 
     Short flag = 1 as Short
+    Date createTime = new Date()
 }
