@@ -10,7 +10,7 @@
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 项目管理</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 未启动项目</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -55,7 +55,7 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"project/list",
+                "url":"project/list4",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器

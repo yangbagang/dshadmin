@@ -1,5 +1,7 @@
 package com.ybg.dsh.pm
 
+import com.ybg.dsh.sys.SystemUser
+
 class ProjectTask {
 
     static belongsTo = [projectFlow: ProjectFlow]
@@ -8,10 +10,13 @@ class ProjectTask {
         updateTime nullable: true
     }
 
+    Long taskId
     String taskName
     String taskVersion
     Date createTime = new Date()
-    Date updateTime
-    Short status = 1 as Short
+    SystemUser createUser
+    Date updateTime = new Date()
+    SystemUser updateUser
+    Integer status = 0//0进行中1己完结2己中止
 
 }

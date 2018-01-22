@@ -11,21 +11,136 @@ class ProjectController {
 
     def springSecurityService
 
+    def projectFlowService
+
     def index() {
+        //默认首页
         //render html for ajax
     }
 
+    def index2() {
+        //进行中
+        //render html for ajax
+    }
+
+    def index3() {
+        //己完成
+        //render html for ajax
+    }
+
+    def index4() {
+        //未启动
+    }
+
+    /**
+     * 列出所有项目
+     * @return
+     */
     def list() {
-        def data = Project.list(params)
-        def count = Project.count()
+        def c = Project.createCriteria()
+        def name = params.name ?: ""
+        def data = c.list(params) {
+            and {
+                eq("flag", 1 as Short)
+                or {
+                    ilike("name", "%"+name+"%")
+                    ilike("memo", "%"+name+"%")
+                }
+            }
+            order("createTime", "desc")
+        }
 
         def result = new AjaxPagingVo()
         result.data = data
         result.draw = Integer.valueOf(params.draw)
         result.error = ""
         result.success = true
-        result.recordsTotal = count
-        result.recordsFiltered = count
+        result.recordsTotal = data.totalCount
+        result.recordsFiltered = data.size()
+        render result as JSON
+    }
+
+    /**
+     * 只列出进行中项目
+     * @return
+     */
+    def list2() {
+        def c = Project.createCriteria()
+        def name = params.name ?: ""
+        def data = c.list(params) {
+            and {
+                eq("status", 1)
+                or {
+                    ilike("name", "%"+name+"%")
+                    ilike("memo", "%"+name+"%")
+                }
+            }
+            order("createTime", "desc")
+        }
+
+        def result = new AjaxPagingVo()
+        result.data = data
+        result.draw = Integer.valueOf(params.draw)
+        result.error = ""
+        result.success = true
+        result.recordsTotal = data.totalCount
+        result.recordsFiltered = data.size()
+        render result as JSON
+    }
+
+    /**
+     * 只列出己完成项目
+     * @return
+     */
+    def list3() {
+        def c = Project.createCriteria()
+        def name = params.name ?: ""
+        def data = c.list(params) {
+            and {
+                eq("status", 2)
+                or {
+                    ilike("name", "%"+name+"%")
+                    ilike("memo", "%"+name+"%")
+                }
+            }
+            order("createTime", "desc")
+        }
+
+        def result = new AjaxPagingVo()
+        result.data = data
+        result.draw = Integer.valueOf(params.draw)
+        result.error = ""
+        result.success = true
+        result.recordsTotal = data.totalCount
+        result.recordsFiltered = data.size()
+        render result as JSON
+    }
+
+    /**
+     * 只列出未启动项目
+     * @return
+     */
+    def list4() {
+        def c = Project.createCriteria()
+        def name = params.name ?: ""
+        def data = c.list(params) {
+            and {
+                eq("status", 0)
+                or {
+                    ilike("name", "%"+name+"%")
+                    ilike("memo", "%"+name+"%")
+                }
+            }
+            order("createTime", "desc")
+        }
+
+        def result = new AjaxPagingVo()
+        result.data = data
+        result.draw = Integer.valueOf(params.draw)
+        result.error = ""
+        result.success = true
+        result.recordsTotal = data.totalCount
+        result.recordsFiltered = data.size()
         render result as JSON
     }
 
@@ -70,7 +185,11 @@ class ProjectController {
         render result as JSON
     }
 
-    @Transactional
+    /**
+     * 中止流程
+     * @param project
+     * @return
+     */
     def delete(Project project) {
         def result = [:]
         if (project == null) {
@@ -80,8 +199,51 @@ class ProjectController {
             return
         }
 
-        project.flag = 0 as Short
-        project.save flush:true
+        if (project.status == 2) {
+            result.success = false
+            result.msg = "项目己完成，无法中止。"
+            render result as JSON
+            return
+        }
+
+        if (project.status == 9) {
+            result.success = false
+            result.msg = "项目己中止，无需重复。"
+            render result as JSON
+            return
+        }
+
+        def user = springSecurityService.currentUser
+        projectFlowService.stop(user, project)
+
+        result.success = true
+        result.msg = ""
+        render result as JSON
+    }
+
+    /**
+     *
+     * @param project
+     * @return
+     */
+    def start(Project project) {
+        def result = [:]
+        if (project == null) {
+            result.success = false
+            result.msg = "project is null."
+            render result as JSON
+            return
+        }
+
+        if (project.status != 0) {
+            result.success = false
+            result.msg = "项目不是未启动状态，不能启动。"
+            render result as JSON
+            return
+        }
+
+        def user = springSecurityService.currentUser
+        projectFlowService.start(user, project)
 
         result.success = true
         result.msg = ""

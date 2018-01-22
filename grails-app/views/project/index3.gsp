@@ -10,7 +10,7 @@
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 项目管理</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 己完结项目</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -55,7 +55,7 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"project/list",
+                "url":"project/list3",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
@@ -77,15 +77,7 @@
                         if (data.status == 2) return "己完成";
                         if (data.status == 9) return "己中止";
                         return "其它";
-                    }, "orderable": true, "searchable": false },
-                { "title": "操作", "data" : function (data) {
-                    return '<a class="btn btn-success" href="javascript:startProject('+data.id+');" title="启动">' +
-                            '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
-                            '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
-                            '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
-                }, "orderable": false, "searchable": false }
+                    }, "orderable": true, "searchable": false }
             ],
             "language": {
                 "zeroRecords": "没有数据",
@@ -143,137 +135,6 @@
         $("#modal-content").html(content);
         $('#myModal').modal('show');
         loadWorkFlowList(0);
-    }
-
-    function startProject(id) {
-        var url = '${createLink(controller: "project", action: "start")}';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: "id=" + id,
-            success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>项目己启动</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
-            },
-            error: function (data) {
-                showErrorInfo(data.responseText);
-            }
-        });
-    }
-
-    function editInfo(id) {
-        var url = '${createLink(controller: "project", action: "show")}';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: "id=" + id,
-            success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑项目</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '<form id="infoForm" role="form">' +
-                        '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
-                        '<div class="form-group">' +
-                        '<label for="name">名称</label>' +
-                        '<input type="text" class="form-control" id="name" name="name" value="'+result.name+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="memo">备注</label>' +
-                        '<input type="text" class="form-control" id="memo" name="memo" value="'+result.memo+'">' +
-                        '</div>' +
-                        '<div class="control-group">' +
-                        '<label class="control-label" for="workFlowId">工作流</label>' +
-                        '<div class="controls">' +
-                        '<select id="workFlowId" name="workFlowId" class="form-control" data-rel="chosen"></select>' +
-                        '<br/><div>项目启动后再更变此项将不会产生效果。</div>' +
-                        '</div>' +
-                        '</form>' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '<a href="javascript:postAjaxForm();" class="btn btn-primary">更新</a>' +
-                        '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
-                loadWorkFlowList(result.workFlowId)
-            },
-            error: function (data) {
-                showErrorInfo(data.responseText);
-            }
-        });
-    }
-
-    function removeInfo(id) {
-        var content = "" +
-                '<div class="modal-header">' +
-                '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>提示</h3>' +
-                '</div>' +
-                '<div class="modal-body">' +
-                '<p>此操作将中止项目进行，此项目中的所有任务都将结束,是否继续?</p>' +
-                '</div>' +
-                '<div class="modal-footer">' +
-                '<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>' +
-                '<a href="javascript:postAjaxRemove('+id+');" class="btn btn-primary">中止</a>' +
-                '</div>';
-        $("#modal-content").html("");
-        $("#modal-content").html(content);
-        $('#myModal').modal('show');
-    }
-
-    function postAjaxRemove(id) {
-        var url = '${createLink(controller: "project", action: "delete")}/' + id;
-        $.ajax({
-            type: "DELETE",
-            dataType: "json",
-            url: url,
-            success: function (result) {
-                var isSuccess = result.success;
-                var errorMsg = result.msg;
-                var content = "";
-                if (isSuccess) {
-                    content = "" +
-                            '<div class="alert alert-success">' +
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            '操作完成' +
-                            '</div>';
-                } else {
-                    content = "" +
-                            '<div class="alert alert-danger">' +
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            errorMsg +
-                            '</div>';
-                }
-                $("#myModal").modal('hide');
-                gridTable.ajax.reload(null, false);
-                $("#msgInfo").html(content);
-                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
-            },
-            error: function (data) {
-                var errorContent = "" +
-                        '<div class="alert alert-danger">' +
-                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                        data.responseText +
-                        '</div>';
-                $("#msgInfo").html(errorContent);
-                $("#msgInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
-            }
-        });
     }
 
     function postAjaxForm() {

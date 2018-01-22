@@ -5,19 +5,21 @@ import com.ybg.dsh.sys.SystemUser
 class Project {
 
     static constraints = {
+        createUser nullable: true
+        updateUser nullable: true
     }
 
-    String name
-    String memo
-    Date createTime
+    String name = ""
+    String memo = ""
+    Date createTime = new Date()
     SystemUser createUser
-    Date updateTime
+    Date updateTime = new Date()
     SystemUser updateUser
-    Long flowId
-    String flowName
-    String flowVersion
-    String taskName
-    String userName
-    Integer status = 0//0进行中1己完结2己中止
-    Short flag = 1 as Short
+    Long workFlowId = 0L
+    Long flowId = 0L
+    String flowName = ""
+    String flowVersion = ""
+    String taskName = "待启动"
+    Integer status = 0//0未启动1进行中2己完成9己中止
+
 }

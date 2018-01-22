@@ -201,9 +201,9 @@
                 { "title": "是否空白", "data" : "isBlank", "orderable": true, "searchable": false },
                 { "title": "是否隐藏", "data" : "isHidden", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
-                        return '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
+                        return '<a class="btn btn-info" href="javascript:editFormInfo('+data.id+');" title="编辑">' +
                             '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="删除">' +
+                            '<a class="btn btn-danger" href="javascript:removeFormInfo('+data.id+');" title="删除">' +
                             '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
                     }, "orderable": false, "searchable": false }
             ],
@@ -276,25 +276,123 @@
         gridTable3.ajax.reload(null, false);
     }
 
-    function addInfo() {
+    function addAssign() {
+        var userId = $("#userId").val();
+        var url = '${createLink(controller: "taskAssign", action: "save")}';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: "taskId="+taskId+"%userId="+userId,
+            success: function (result) {
+                var isSuccess = result.success;
+                var errorMsg = result.msg;
+                var content = "";
+                if (eval(isSuccess)) {
+                    content = "" +
+                        '<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '操作完成' +
+                        '</div>';
+                } else {
+                    content = "" +
+                        '<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        JSON.stringify(errorMsg) +
+                        '</div>';
+                }
+                $("#myModal").modal('hide');
+                gridTable2.ajax.reload(null, false);
+                $("#assignInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            },
+            error: function(data) {
+                var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
+                $("#assignInfo").html(errorContent);
+                $("#assignInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
+
+    function removeAssign(id) {
+        var content = "" +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal">×</button>' +
+            '<h3>提示</h3>' +
+            '</div>' +
+            '<div class="modal-body">' +
+            '<p>删除后信息将无法恢复,是否继续?</p>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+            '<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>' +
+            '<a href="javascript:postAssignRemove('+id+');" class="btn btn-primary">删除</a>' +
+            '</div>';
+        $("#modal-content").html("");
+        $("#modal-content").html(content);
+        $('#myModal').modal('show');
+    }
+
+    function postAssignRemove(id) {
+        var url = '${createLink(controller: "taskAssign", action: "delete")}/' + id;
+        $.ajax({
+            type: "DELETE",
+            dataType: "json",
+            url: url,
+            success: function (result) {
+                var isSuccess = result.success;
+                var errorMsg = result.msg;
+                var content = "";
+                if (isSuccess) {
+                    content = "" +
+                        '<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '删除完成' +
+                        '</div>';
+                } else {
+                    content = "" +
+                        '<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        errorMsg +
+                        '</div>';
+                }
+                $("#myModal").modal('hide');
+                gridTable2.ajax.reload(null, false);
+                $("#assignInfo").html(content);
+                $("#assignInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            },
+            error: function (data) {
+                var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
+                $("#assignInfo").html(errorContent);
+                $("#assignInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
+
+    function addFormInfo() {
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>新建角色</h3>' +
+                '<h3>新建表单项</h3>' +
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
                 '<div class="form-group">' +
-                '<label for="authority">权限</label>' +
-                '<input type="text" class="form-control" id="authority" name="authority" placeholder="权限英文值,非随意值。">' +
+                '<label for="keyName">英文名</label>' +
+                '<input type="text" class="form-control" id="keyName" name="keyName" placeholder="keyName，区分大小写，不能有空格。">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="roleName">角色名</label>' +
-                '<input type="text" class="form-control" id="roleName" name="roleName" placeholder="角色名">' +
+                '<label for="labelName">中文名</label>' +
+                '<input type="text" class="form-control" id="labelName" name="labelName" placeholder="中文标识名，用作提示。">' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<label for="remark">备注</label>' +
-                '<input type="text" class="form-control" id="remark" name="remark" placeholder="备注">' +
+                '<label for="type">类型</label>' +
+                '<select name="type" id="type"><option value="text">文本</option><option value="file">文件</option></select>' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
@@ -307,8 +405,8 @@
         $('#myModal').modal('show');
     }
 
-    function editInfo(id) {
-        var url = '${createLink(controller: "systemRole", action: "show")}';
+    function editFormInfo(id) {
+        var url = '${createLink(controller: "taskForm", action: "show")}';
         $.ajax({
             type: "GET",
             url: url,
@@ -317,22 +415,22 @@
                 var content = "" +
                         '<div class="modal-header">' +
                         '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑角色</h3>' +
+                        '<h3>编辑表单项</h3>' +
                         '</div>' +
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
                         '<div class="form-group">' +
-                        '<label for="authority">权限值</label>' +
-                        '<input type="text" class="form-control" id="authority" name="authority" value="'+result.authority+'">' +
+                        '<label for="keyName">英文名</label>' +
+                        '<input type="text" class="form-control" id="keyName" name="keyName" value="'+result.keyName+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="roleName">角色名</label>' +
-                        '<input type="text" class="form-control" id="roleName" name="roleName" value="'+result.roleName+'">' +
+                        '<label for="labelName">中文名</label>' +
+                        '<input type="text" class="form-control" id="labelName" name="labelName" value="'+result.labelName+'">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<label for="remark">备注</label>' +
-                        '<input type="text" class="form-control" id="remark" name="remark" value="'+result.remark+'">' +
+                        '<label for="type">类型</label>' +
+                        '<select name="type" id="type"><option value="text">文本</option><option value="file">文件</option></select>' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
@@ -343,6 +441,7 @@
                 $("#modal-content").html("");
                 $("#modal-content").html(content);
                 $('#myModal').modal('show');
+                $("#type").val(result.type);
             },
             error: function (data) {
                 showErrorInfo(data.responseText);
@@ -350,7 +449,7 @@
         });
     }
 
-    function removeInfo(id) {
+    function removeFormInfo(id) {
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
@@ -369,7 +468,7 @@
     }
 
     function postAjaxRemove(id) {
-        var url = '${createLink(controller: "systemRole", action: "delete")}/' + id;
+        var url = '${createLink(controller: "taskForm", action: "delete")}/' + id;
         $.ajax({
             type: "DELETE",
             dataType: "json",
@@ -392,9 +491,9 @@
                             '</div>';
                 }
                 $("#myModal").modal('hide');
-                gridTable.ajax.reload(null, false);
-                $("#msgInfo").html(content);
-                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+                gridTable3.ajax.reload(null, false);
+                $("#msgFormInfo").html(content);
+                $("#msgFormInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
             },
             error: function (data) {
                 var errorContent = "" +
@@ -402,14 +501,14 @@
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         data.responseText +
                         '</div>';
-                $("#msgInfo").html(errorContent);
-                $("#msgInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
+                $("#msgFormInfo").html(errorContent);
+                $("#msgFormInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
             }
         });
     }
 
     function postAjaxForm() {
-        var url = '${createLink(controller: "systemRole", action: "save")}';
+        var url = '${createLink(controller: "taskForm", action: "save")}';
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -433,8 +532,8 @@
                             '</div>';
                 }
                 $("#myModal").modal('hide');
-                gridTable.ajax.reload(null, false);
-                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+                gridTable3.ajax.reload(null, false);
+                $("#msgFormInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
             },
             error: function(data) {
                 var errorContent = "" +
@@ -442,8 +541,8 @@
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         data.responseText +
                         '</div>';
-                $("#msgInfo").html(errorContent);
-                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+                $("#msgFormInfo").html(errorContent);
+                $("#msgFormInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
             }
         });
     }

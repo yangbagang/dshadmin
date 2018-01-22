@@ -129,8 +129,9 @@
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 项目管理</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a class="ajax-link" href="${createLink(uri: '/project')}">项目管理</a></li>
-                                <li><a class="ajax-link" href="${createLink(uri: '/project')}">进行中项目</a></li>
-                                <li><a class="ajax-link" href="${createLink(uri: '/project')}">己完结项目</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/project/index4')}">未启动项目</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/project/index2')}">进行中项目</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/project/index3')}">己完结项目</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index1')}">待办任务</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index2')}">己办任务</a></li>
                             </ul>

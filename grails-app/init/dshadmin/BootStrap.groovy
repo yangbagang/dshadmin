@@ -1,6 +1,7 @@
 package dshadmin
 
 import com.ybg.dsh.objectMarshaller.FlowDefinitionObjectMarshaller
+import com.ybg.dsh.objectMarshaller.ProjectObjectMarshaller
 import com.ybg.dsh.objectMarshaller.SystemUserRoleObjectMarshaller
 import com.ybg.dsh.objectMarshaller.TaskAssignObjectMarshaller
 import com.ybg.dsh.objectMarshaller.WorkTaskObjectMarshaller
@@ -19,6 +20,7 @@ class BootStrap {
         JSON.registerObjectMarshaller(new FlowDefinitionObjectMarshaller(), 9999)
         JSON.registerObjectMarshaller(new WorkTaskObjectMarshaller(), 9999)
         JSON.registerObjectMarshaller(new TaskAssignObjectMarshaller(), 9999)
+        JSON.registerObjectMarshaller(new ProjectObjectMarshaller(), 9999)
     }
 
     def destroy = {

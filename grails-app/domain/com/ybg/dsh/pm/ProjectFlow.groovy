@@ -14,7 +14,8 @@ class ProjectFlow {
     String flowVersion
     SystemUser creator
     Date createTime
+    SystemUser updater
     Date updateTime
-    Integer status
-    Short flag = 1 as Short
+    Integer status = 0//0进行中1己完结2己中止
+
 }

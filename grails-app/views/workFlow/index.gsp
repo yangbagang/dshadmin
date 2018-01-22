@@ -260,7 +260,7 @@
                         data.responseText +
                         '</div>';
                 $("#msgInfo").html(errorContent);
-                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+                $("#msgInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
             }
         });
     }

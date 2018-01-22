@@ -57,10 +57,7 @@
         var demo;
         $(document).ready(function(){
             demo=$.createGooFlow($("#flowJSON"),property);
-            //demo.setNodeRemarks(remark);
-            //demo.loadData(flowContent);
             loadFlowDefinition();
-            //demo.reinitSize(1000,520);
             demo.onItemRightClick=function(id,type){
                 console.log("onItemRightClick: "+id+","+type);
                 return true;//返回false可以阻止浏览器默认的右键菜单事件

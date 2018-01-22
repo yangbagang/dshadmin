@@ -10,7 +10,7 @@
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 项目管理</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 进行中项目</h2>
         <div class="box-icon">
             <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -55,7 +55,7 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"project/list",
+                "url":"project/list2",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
@@ -79,11 +79,7 @@
                         return "其它";
                     }, "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
-                    return '<a class="btn btn-success" href="javascript:startProject('+data.id+');" title="启动">' +
-                            '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
-                            '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
-                            '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
+                    return '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
                             '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
@@ -143,79 +139,6 @@
         $("#modal-content").html(content);
         $('#myModal').modal('show');
         loadWorkFlowList(0);
-    }
-
-    function startProject(id) {
-        var url = '${createLink(controller: "project", action: "start")}';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: "id=" + id,
-            success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>项目己启动</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
-            },
-            error: function (data) {
-                showErrorInfo(data.responseText);
-            }
-        });
-    }
-
-    function editInfo(id) {
-        var url = '${createLink(controller: "project", action: "show")}';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: "id=" + id,
-            success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>编辑项目</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '<form id="infoForm" role="form">' +
-                        '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
-                        '<div class="form-group">' +
-                        '<label for="name">名称</label>' +
-                        '<input type="text" class="form-control" id="name" name="name" value="'+result.name+'">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="memo">备注</label>' +
-                        '<input type="text" class="form-control" id="memo" name="memo" value="'+result.memo+'">' +
-                        '</div>' +
-                        '<div class="control-group">' +
-                        '<label class="control-label" for="workFlowId">工作流</label>' +
-                        '<div class="controls">' +
-                        '<select id="workFlowId" name="workFlowId" class="form-control" data-rel="chosen"></select>' +
-                        '<br/><div>项目启动后再更变此项将不会产生效果。</div>' +
-                        '</div>' +
-                        '</form>' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
-                        '<a href="javascript:postAjaxForm();" class="btn btn-primary">更新</a>' +
-                        '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
-                loadWorkFlowList(result.workFlowId)
-            },
-            error: function (data) {
-                showErrorInfo(data.responseText);
-            }
-        });
     }
 
     function removeInfo(id) {
