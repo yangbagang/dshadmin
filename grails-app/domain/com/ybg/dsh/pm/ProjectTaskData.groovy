@@ -7,9 +7,12 @@ class ProjectTaskData {
     static constraints = {
     }
 
-    String label
-    String name
-    String type
-    String value
+    String label = ""
+    String name = ""
+    String type = ""
+    String value = ""
+    Long fileSize = 0L
+    String fileName = ""
+    String fileType = ""
 
 }

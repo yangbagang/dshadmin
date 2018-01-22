@@ -1,25 +1,48 @@
 package com.ybg.dsh.pm
 
-import com.ybg.dsh.vo.AjaxPagingVo
 import grails.converters.JSON
 
 class ProjectTaskController {
+
+    def springSecurityService
+
+    def projectTaskService
 
     def index1() { }
 
     def index2() { }
 
-    def list() {
-        def data = ProjectTask.list(params)
-        def count = ProjectTask.count()
+    /**
+     * 列出进行中任务
+     * @return
+     */
+    def list1() {
+        def user = springSecurityService.currentUser
+        def result = projectTaskService.listTask(user, 1, params)
+        render result as JSON
+    }
 
-        def result = new AjaxPagingVo()
-        result.data = data
-        result.draw = Integer.valueOf(params.draw)
-        result.error = ""
+    /**
+     * 列出己完成任务
+     * @return
+     */
+    def list2() {
+        def user = springSecurityService.currentUser
+        def result = projectTaskService.listTask(user, 2, params)
+        render result as JSON
+    }
+
+    /**
+     * 完成任务
+     */
+    def complete(Long taskId) {
+        def result = [:]
+
+        def user = springSecurityService.currentUser
+        projectTaskService.complete(user, taskId)
+
         result.success = true
-        result.recordsTotal = count
-        result.recordsFiltered = count
+        result.msg = ""
         render result as JSON
     }
 

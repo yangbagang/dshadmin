@@ -40,12 +40,9 @@ class ProjectController {
         def c = Project.createCriteria()
         def name = params.name ?: ""
         def data = c.list(params) {
-            and {
-                eq("flag", 1 as Short)
-                or {
-                    ilike("name", "%"+name+"%")
-                    ilike("memo", "%"+name+"%")
-                }
+            or {
+                ilike("name", "%"+name+"%")
+                ilike("memo", "%"+name+"%")
             }
             order("createTime", "desc")
         }

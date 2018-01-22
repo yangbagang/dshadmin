@@ -3,6 +3,7 @@ package com.ybg.dsh.pm
 import com.ybg.dsh.enums.NodeType
 import com.ybg.dsh.sys.SystemUser
 import com.ybg.dsh.wf.FlowDefinition
+import com.ybg.dsh.wf.TaskForm
 import com.ybg.dsh.wf.Transaction
 import com.ybg.dsh.wf.WorkFlow
 import com.ybg.dsh.wf.WorkTask
@@ -96,6 +97,19 @@ class ProjectFlowService {
         projectTask.createTime = now
         projectTask.updateTime = now
         projectTask.save flush: true
+
+        //生成表单实例
+        def formList = TaskForm.findAllByWorkTask(task)
+        if (formList) {
+            formList.each { form ->
+                def data = new ProjectTaskData()
+                data.projectTask = projectTask
+                data.label = form.labelName
+                data.name = form.keyName
+                data.type = form.type
+                data.save flush: true
+            }
+        }
     }
 
     def getFirstTask(FlowDefinition flowDefinition) {
