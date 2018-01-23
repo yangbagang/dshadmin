@@ -32,6 +32,7 @@ class ProjectTaskDataObjectMarshaller implements ObjectMarshaller<JSON> {
                 .key("project").value(object.projectTask.projectFlow.project.name)
                 .key('task').value(object.projectTask.taskName)
                 .key('flow').value(object.projectTask.projectFlow.flowName)
+                .key("createTime").value(sdf?.format(object.createTime))
         writer.endObject()
     }
 

@@ -62,17 +62,18 @@
                     d.name = $("#name").val();
                 }
             },
-            "order": [[6, 'desc']], // 默认排序(第三列降序, asc升序)
+            "order": [[7, 'desc']], // 默认排序(第三列降序, asc升序)
             "columns": [
                 { "title": "项目", "data" : "project", "orderable": false, "searchable": false },
                 { "title": "流程", "data" : "flow", "orderable": false, "searchable": false },
                 { "title": "任务", "data" : "task", "orderable": false, "searchable": false },
+                { "title": "标签名", "data" : "label", "orderable": true, "searchable": false },
                 { "title": "文件名", "data" : "fileName", "orderable": true, "searchable": false },
                 { "title": "文件大小", "data" : "fileSize", "orderable": true, "searchable": false },
                 { "title": "文件类型", "data" : "fileType", "orderable": true, "searchable": false },
                 { "title": "上传时间", "data" : "createTime", "orderable": true, "searchable": false },
                 { "title": "下载文件", "data" : function (data) {
-                       return '<a href="'+ serverPath + 'download/'+data.fileId+'">下载</a>';
+                       return '<a href="'+ serverPath + 'download/'+data.value+'">下载</a>';
                     }, "orderable": false, "searchable": false }
             ],
             "language": {
