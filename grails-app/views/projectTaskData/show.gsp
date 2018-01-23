@@ -5,7 +5,7 @@
 
 <div class="modal-body">
     <form id="infoForm" role="form">
-        <g:each in="list" var="data">
+        <g:each in="${list}" var="data">
             <g:if test="${data.type == 'text'}">
                 <div class="form-group">
                     <label for="${data.name}">${data.label}</label>

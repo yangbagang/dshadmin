@@ -80,7 +80,7 @@
                     }, "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
-                            '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
+                            '<i class="glyphicon glyphicon-stop icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
             "language": {

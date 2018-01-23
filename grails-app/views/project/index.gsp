@@ -80,11 +80,11 @@
                     }, "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:startProject('+data.id+');" title="启动">' +
-                            '<i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp;&nbsp;' +
+                            '<i class="glyphicon glyphicon-play icon-white"></i></a>&nbsp;&nbsp;' +
                             '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
                             '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
                             '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
-                            '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
+                            '<i class="glyphicon glyphicon-stop icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
             "language": {
@@ -152,19 +152,25 @@
             url: url,
             data: "id=" + id,
             success: function (result) {
-                var content = "" +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                        '<h3>项目己启动</h3>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>' +
+                var isSuccess = result.success;
+                var errorMsg = result.msg;
+                var content = "";
+                if (eval(isSuccess)) {
+                    content = "" +
+                        '<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '操作完成' +
                         '</div>';
-                $("#modal-content").html("");
-                $("#modal-content").html(content);
-                $('#myModal').modal('show');
+                } else {
+                    content = "" +
+                        '<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        JSON.stringify(errorMsg) +
+                        '</div>';
+                }
+                $("#myModal").modal('hide');
+                gridTable.ajax.reload(null, false);
+                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
             },
             error: function (data) {
                 showErrorInfo(data.responseText);

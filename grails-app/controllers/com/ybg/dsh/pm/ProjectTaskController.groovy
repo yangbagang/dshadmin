@@ -18,7 +18,7 @@ class ProjectTaskController {
      */
     def list1() {
         def user = springSecurityService.currentUser
-        def result = projectTaskService.listTask(user, 1, params)
+        def result = projectTaskService.listTask(user, 0, params)
         render result as JSON
     }
 
@@ -28,7 +28,7 @@ class ProjectTaskController {
      */
     def list2() {
         def user = springSecurityService.currentUser
-        def result = projectTaskService.listTask(user, 2, params)
+        def result = projectTaskService.listTask(user, 1, params)
         render result as JSON
     }
 
