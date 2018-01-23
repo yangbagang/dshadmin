@@ -1,16 +1,16 @@
 <div>
     <ul class="breadcrumb">
         <li>
-            <a href="#">流程管理</a>
+            <a href="#">项目资料</a>
         </li>
         <li>
-            <a href="#">己办任务</a>
+            <a href="#">项目资料</a>
         </li>
     </ul>
 </div>
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 己办任务</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> 项目资料</h2>
         <div class="box-icon">
             <a href="#" class="btn btn-minimize btn-round btn-default"><i
                     class="glyphicon glyphicon-chevron-up"></i></a>
@@ -22,7 +22,7 @@
 <div class="box-content">
     <form class="form-inline" role="form" action="#">
         <div class="form-group">
-            <label class="control-label" for="name">名称:</label>
+            <label class="control-label" for="name">关键词:</label>
             <input type="text" class="form-control" id="name">
             <input type="button" class="btn btn-primary" value="查询" id="searcher"/>
         </div>
@@ -39,8 +39,11 @@
         </div>
     </div>
 </div>
+
 <script>
     var gridTable;
+    var serverPath = 'http://183.57.41.230/FileServer/file/';
+    var fileHasChanged = false;
     $(document).ready(function(){
         var table=$('#dataTable').DataTable({
             "bLengthChange": true,
@@ -52,22 +55,24 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"projectTask/list2",
+                "url":"projectTaskData/listFiles",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器
-                    d.taskName = $("#name").val();
+                    d.name = $("#name").val();
                 }
             },
-            "order": [[5, 'desc']], // 默认排序(第三列降序, asc升序)
+            "order": [[3, 'desc']], // 默认排序(第三列降序, asc升序)
             "columns": [
                 { "title": "项目", "data" : "project", "orderable": false, "searchable": false },
                 { "title": "流程", "data" : "flow", "orderable": false, "searchable": false },
-                { "title": "任务", "data" : "taskName", "orderable": false, "searchable": false },
-                { "title": "建创时间", "data" : "createTime", "orderable": true, "searchable": false },
-                { "title": "创建人", "data" : "createUser", "orderable": false, "searchable": false },
-                { "title": "更新时间", "data" : "updateTime", "orderable": true, "searchable": false },
-                { "title": "更新人", "data" : "updateUser", "orderable": false, "searchable": false }
+                { "title": "任务", "data" : "task", "orderable": false, "searchable": false },
+                { "title": "文件名", "data" : "fileName", "orderable": true, "searchable": false },
+                { "title": "文件大小", "data" : "fileSize", "orderable": true, "searchable": false },
+                { "title": "文件类型", "data" : "fileType", "orderable": true, "searchable": false },
+                { "title": "下载文件", "data" : function (data) {
+                       return '<a href="'+ serverPath + 'download/'+data.fileId+'">下载</a>';
+                    }, "orderable": false, "searchable": false }
             ],
             "language": {
                 "zeroRecords": "没有数据",

@@ -247,4 +247,7 @@ class ProjectController {
         render result as JSON
     }
 
+    def files() {
+        //转向文档下载界面
+    }
 }

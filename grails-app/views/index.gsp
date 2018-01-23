@@ -139,7 +139,7 @@
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 项目资料</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a class="ajax-link" href="${createLink(uri: '/projectTaskData/listFiles')}">项目资料</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/project/files')}">项目资料</a></li>
                             </ul>
                         </li>
                     </ul>
