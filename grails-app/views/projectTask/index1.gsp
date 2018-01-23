@@ -67,8 +67,10 @@
                 { "title": "建创时间", "data" : "createTime", "orderable": true, "searchable": false },
                 { "title": "创建人", "data" : "createUser", "orderable": false, "searchable": false },
                 { "title": "操作", "data" : function (data) {
-                    return '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
-                            '<i class="glyphicon glyphicon-edit icon-white"></i></a>';
+                    return  '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="处理">' +
+                            '<i class="glyphicon glyphicon-open icon-white"></i></a>&nbsp;&nbsp;' +
+                            '<a class="btn btn-info" href="javascript:postAjaxForm('+data.id+');" title="提交">' +
+                            '<i class="glyphicon glyphicon-ok icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
             "language": {
@@ -102,7 +104,7 @@
             url: url,
             data: "taskId=" + id,
             success: function (result) {
-                var content = result.responseText;
+                var content = result;
                 $("#modal-content").html("");
                 $("#modal-content").html(content);
                 $('#myModal').modal('show');

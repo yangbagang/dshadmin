@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label for="${data.name}">${data.label}</label>
                     <input type="file" class="form-control" id="${data.name}" name="${data.name}" placeholder="选择文件。"
-                           onchange="getFileInfo(${data.id}, this, $('#msg_${data.id}'));">
+                           onchange="postAjaxUpload(${data.id}, this, $('#msg_${data.id}'));">
                     <br/><div id="msg_${data.id}"></div>
                 </div>
             </g:if>
@@ -28,7 +28,6 @@
 
 <div class="modal-footer">
     <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
-    <a href="javascript:postAjaxForm();" class="btn btn-primary">保存</a>
 </div>
 
 <script>
