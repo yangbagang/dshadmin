@@ -233,7 +233,6 @@
             }
         });
     }
-
     function loadWorkFlowList(workId) {
         var url = '${createLink(controller: "workFlow", action: "flowList")}';
         $.ajax({

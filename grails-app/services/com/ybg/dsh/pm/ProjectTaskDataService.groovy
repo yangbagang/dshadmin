@@ -9,6 +9,7 @@ class ProjectTaskDataService {
         def data = ProjectTaskData.get(id)
         if (data) {
             data.value = value
+            data.createTime = new Date()
             data.save flush: true
         }
     }
@@ -20,6 +21,7 @@ class ProjectTaskDataService {
             data.fileSize = fileSize
             data.fileName = fileName
             data.fileType = fileType
+            data.createTime = new Date()
             data.save flush: true
         }
     }

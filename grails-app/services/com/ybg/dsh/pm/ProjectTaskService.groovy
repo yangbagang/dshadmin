@@ -14,8 +14,12 @@ import grails.gorm.transactions.Transactional
 class ProjectTaskService {
 
     def listTask(SystemUser user, Integer status, Map params) {
-        def c = Project.createCriteria()
+        def c = ProjectTask.createCriteria()
         def taskIdList = TaskAssign.findAllBySystemUser(user)*.workTask*.id
+        if (taskIdList == null || taskIdList.size() == 0) {
+            taskIdList = []
+            taskIdList.add(0L)
+        }
         def data = c.list(params) {
             and {
                 eq("status", status)
@@ -31,6 +35,7 @@ class ProjectTaskService {
         result.success = true
         result.recordsTotal = data.totalCount
         result.recordsFiltered = data.size()
+        result
     }
 
     def complete(SystemUser user, Long taskId) {

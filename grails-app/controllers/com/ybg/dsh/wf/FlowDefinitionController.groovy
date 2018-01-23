@@ -61,10 +61,11 @@ class FlowDefinitionController {
     def update(Long flowId, String context) {
         def result = [:]
 
-        flowDefinitionService.updateContext(flowId, context)
+        def id = flowDefinitionService.updateContext(flowId, context)
 
         result.success = true
         result.msg = ""
+        result.id = id
         render result as JSON
     }
 

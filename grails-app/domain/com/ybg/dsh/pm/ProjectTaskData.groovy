@@ -14,5 +14,5 @@ class ProjectTaskData {
     Long fileSize = 0L
     String fileName = ""
     String fileType = ""
-
+    Date createTime = new Date()//更新时间
 }

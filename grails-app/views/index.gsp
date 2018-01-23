@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>大沙河项目管理系统</title>
-    <meta name="description" content="大沙河项目管理系统">
+    <title>报批报建管理系统</title>
+    <meta name="description" content="报批报建管理系统">
     <meta name="author" content="杨拔纲">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The styles -->
@@ -47,7 +47,7 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="${createLink(uri: '/')}"> <asset:image alt="Charisma Logo" src="logo20.png" class="hidden-xs"/>
-            <span>项目管理系统</span></a>
+            <span>报批报建管理系统</span></a>
 
         <!-- user dropdown starts -->
         <div class="btn-group pull-right">
@@ -197,7 +197,7 @@
     <hr>
 
     <footer class="row">
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; 大沙河项目管理系统 2018 </p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; 报批报建管理系统 2018 </p>
 
         <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Powered by: <a
                 href="mailto:81667842@qq.com">YBG</a></p>

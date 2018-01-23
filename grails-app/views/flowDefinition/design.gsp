@@ -2,7 +2,7 @@
 <html xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>流程设计 - ${flow.name}</title>
+    <title>报批报建管理系统 - 流程设计 - ${flow.name}</title>
     <!--[if lt IE 9]>
 <?import namespace="v" implementation="#default#VML" ?>
 <![endif]-->
@@ -78,6 +78,7 @@
                     url: "update",
                     data: "flowId="+ flowId + "&context=" + context,
                     success: function (result) {
+                        flowId = result.id;
                         $("#msg").html("设置保存成功");
                     },
                     error: function (data) {
@@ -94,7 +95,8 @@
                 type: "GET",
                 url: "viewContext?flowId=" + flowId,
                 success: function (result) {
-                    demo.loadData(result)
+                    demo.loadData(result);
+                    demo.setTitle('流程设计 - ${flow.name}');
                 },
                 error: function (data) {
                     $("#msg").html(data.responseText);

@@ -12,8 +12,6 @@
     <div class="box-header well" data-original-title="">
         <h2><i class="glyphicon glyphicon-user"></i> 节点配置</h2>
         <div class="box-icon">
-            <a href="javascript:addInfo();" class="btn btn-plus btn-round btn-default"><i
-                    class="glyphicon glyphicon-plus"></i></a>
             <a href="#" class="btn btn-minimize btn-round btn-default"><i
                     class="glyphicon glyphicon-chevron-up"></i></a>
             <a href="#" class="btn btn-close btn-round btn-default"><i
@@ -34,7 +32,7 @@
 
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 绑定操作人</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> <span id="op_title2">绑定操作人 - 未选定任务</span></h2>
         <div class="box-icon">
             <a href="#" class="btn btn-minimize btn-round btn-default"><i
                     class="glyphicon glyphicon-chevron-up"></i></a>
@@ -57,7 +55,7 @@
 
 <div class="box-inner">
     <div class="box-header well" data-original-title="">
-        <h2><i class="glyphicon glyphicon-user"></i> 表单配置</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> <span id="op_title3">表单配置 - 未选定任务</span></h2>
         <div class="box-icon">
             <a href="javascript:addFormInfo();" class="btn btn-plus btn-round btn-default"><i
                     class="glyphicon glyphicon-plus"></i></a>
@@ -113,7 +111,7 @@
                 { "title": "更新时间", "data" : "createTime", "orderable": true, "searchable": false },
                 { "title": "类型", "data" : "taskType", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
-                    return  '<a class="btn btn-info" href="javascript:loadInfo('+data.id+');" title="编辑">' +
+                    return  '<a class="btn btn-info" href="javascript:loadInfo('+data.id+', \''+data.name+'\');" title="编辑">' +
                             '<i class="glyphicon glyphicon-edit icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
@@ -195,8 +193,8 @@
             },
             "order": [[0, 'asc']], // 默认排序(第三列降序, asc升序)
             "columns": [
-                { "title": "英文名", "data" : "name", "orderable": true, "searchable": false },
-                { "title": "中文名", "data" : "flowName", "orderable": false, "searchable": false },
+                { "title": "英文名", "data" : "keyName", "orderable": true, "searchable": false },
+                { "title": "中文名", "data" : "labelName", "orderable": false, "searchable": false },
                 { "title": "类型", "data" : "type", "orderable": true, "searchable": false },
                 { "title": "是否空白", "data" : "isBlank", "orderable": true, "searchable": false },
                 { "title": "是否隐藏", "data" : "isHidden", "orderable": true, "searchable": false },
@@ -246,10 +244,10 @@
                 $.each(result, function (index, item) {
                     $("#flowId").append("<option value='"+item.flowId+"'>"+item.flowName+"</option>");
                 });
+                //默认查询
+                gridTable.ajax.reload(null, false);
             }
         });
-        //默认查询
-        gridTable.ajax.reload(null, false);
     }
 
     function loadUserList() {
@@ -270,19 +268,25 @@
         gridTable.ajax.reload(null, false);
     }
 
-    function loadInfo(id) {
+    function loadInfo(id, name) {
         taskId = id;
+        $("#op_title2").html("绑定操作人 - " + name);
+        $("#op_title3").html("表单配置 - " + name);
         gridTable2.ajax.reload(null, false);
         gridTable3.ajax.reload(null, false);
     }
 
     function addAssign() {
+        if (taskId == 0) {
+            alert("请选定需要绑定的任务。");
+            return;
+        }
         var userId = $("#userId").val();
         var url = '${createLink(controller: "taskAssign", action: "save")}';
         $.ajax({
             type: "POST",
             url: url,
-            data: "taskId="+taskId+"%userId="+userId,
+            data: "taskId="+taskId+"&userId="+userId,
             success: function (result) {
                 var isSuccess = result.success;
                 var errorMsg = result.msg;
@@ -375,6 +379,10 @@
     }
 
     function addFormInfo() {
+        if (taskId == 0) {
+            alert("请选定需要配置的任务。");
+            return;
+        }
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
@@ -382,6 +390,7 @@
                 '</div>' +
                 '<div class="modal-body">' +
                 '<form id="infoForm" role="form">' +
+                '<input type="hidden" id="workTask.id" name="workTask.id" value="' + taskId + '">' +
                 '<div class="form-group">' +
                 '<label for="keyName">英文名</label>' +
                 '<input type="text" class="form-control" id="keyName" name="keyName" placeholder="keyName，区分大小写，不能有空格。">' +
@@ -420,6 +429,7 @@
                         '<div class="modal-body">' +
                         '<form id="infoForm" role="form">' +
                         '<input type="hidden" id="id" name="id" value="' + result.id + '">' +
+                        '<input type="hidden" id="workTask.id" name="workTask.id" value="' + result.workTask.id + '">' +
                         '<div class="form-group">' +
                         '<label for="keyName">英文名</label>' +
                         '<input type="text" class="form-control" id="keyName" name="keyName" value="'+result.keyName+'">' +

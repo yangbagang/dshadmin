@@ -58,6 +58,8 @@ class FlowDefinitionService {
         //保存数据
         saveNodes(nodes, newFlow)
         saveLines(lines, newFlow)
+
+        newFlow.id
     }
 
     private saveNodes(nodes, flowDefinition) {
