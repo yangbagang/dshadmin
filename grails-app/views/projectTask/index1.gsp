@@ -115,13 +115,13 @@
         });
     }
 
-    function postAjaxForm() {
+    function postAjaxForm(id) {
         var url = '${createLink(controller: "projectTask", action: "complete")}';
         $.ajax({
             type: "POST",
             dataType: "json",
             url: url,
-            data: $('#infoForm').serialize(),
+            data: "taskId=" + id,
             success: function (result) {
                 var isSuccess = result.success;
                 var errorMsg = result.msg;

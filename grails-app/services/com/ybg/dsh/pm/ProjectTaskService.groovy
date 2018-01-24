@@ -39,24 +39,30 @@ class ProjectTaskService {
     }
 
     def complete(SystemUser user, Long taskId) {
+        println("开始节点推进。。。")
         def now = new Date()
         def projectTask = ProjectTask.get(taskId)
+        println("开始检查projectTask是否存在。。。")
         if (projectTask == null) return
 
         //标记当前任务为完成状态
+        println("标记当前任务为完成状态。。。")
         projectTask.updateTime = now
         projectTask.updateUser = user
-        projectTask.status = 2
+        projectTask.status = 1
         projectTask.save flush: true
 
+        println("准备数据。。。")
         def projectFlow = projectTask.projectFlow
         def project = projectFlow.project
 
         //获取下一任务
+        println("获取下一任务。。。")
         def tasks = getNextTasks(WorkTask.get(projectTask.taskId).taskId)
         if (tasks == null || tasks.isEmpty()) return
 
         //公共内容
+        println("公共内容。。。")
         project.taskName = ""
         project.updateUser = user
         project.updateTime = now
@@ -64,41 +70,52 @@ class ProjectTaskService {
         projectFlow.updateTime = now
 
         //任务处理
+        println("任务处理。。。")
         tasks.each { task ->
             //如果下一任务不是结束任务
             if (task.taskType == NodeType.task) {
+                println("将项目指向下一任务")
                 //将项目指向下一任务
                 project.taskName += "${task.name} "
                 //创建新任务实例，创建新表单实例
+                println("创建新任务实例，创建新表单实例")
                 createTaskInstance(projectFlow, task, user, now)
             } else if (task.taskType == NodeType.end) {
                 //如果下一任务是结束任务
                 //标记流程完成
+                println("标记流程完成")
                 projectFlow.status = 1
                 //查找下一流程
+                println("查找下一流程")
                 def flowDefinition = FlowDefinition.findByPrevId(projectFlow.flowId)
                 if (flowDefinition) {
                     //如果存在，取得下一流程的第一个任务节点
+                    println("如果存在，取得下一流程的第一个任务节点")
                     def newTask = getFirstTask(flowDefinition)
                     if (newTask) {
                         //则将项目指向下一流程
+                        println("则将项目指向下一流程")
                         project.flowId = flowDefinition.id
                         project.flowName = flowDefinition.name
                         project.flowVersion = flowDefinition.flowVersion
                         project.taskName = newTask.name
                         //创建新流程实例
+                        println("创建新流程实例")
                         def newFlow = createFlowInstance(project, flowDefinition, user, now)
                         //新任务实例，新表单实例
+                        println("新任务实例，新表单实例")
                         createTaskInstance(newFlow, newTask, user, now)
                     }
                 } else {
                     //如果不存在，则标记项目完成
+                    println("如果不存在，则标记项目完成")
                     project.status = 2
                 }
             }
         }
 
         //保存数据
+        println("保存数据")
         projectFlow.save flush: true
         project.save flush: true
     }
