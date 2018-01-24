@@ -199,8 +199,7 @@
     <footer class="row">
         <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; 报批报建管理系统 2018 </p>
 
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Powered by: <a
-                href="mailto:81667842@qq.com">YBG</a></p>
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">技术支持: 企业信息化小组</p>
     </footer>
 
 </div><!--/.fluid-container-->
