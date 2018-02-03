@@ -25,7 +25,7 @@
     <div class="box-content alerts">
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            欢迎 <strong><sec:loggedInUserInfo field='realName'/></strong> 再次回来。当前版本定位于体验，相关数据随时会清空。
+            欢迎 <strong><sec:loggedInUserInfo field='realName'/></strong> 再次回来。
         </div>
     </div>
 </div>
