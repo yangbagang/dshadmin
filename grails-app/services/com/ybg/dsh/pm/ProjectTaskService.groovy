@@ -63,7 +63,9 @@ class ProjectTaskService {
 
         //公共内容
         println("公共内容。。。")
-        project.taskName = ""
+        //去掉本次任务内容
+        project.taskName = project.taskName.replace("[${projectTask.taskName}]", "")
+        println("任务名称：${project.taskName}")
         project.updateUser = user
         project.updateTime = now
         projectFlow.updater = user
@@ -72,52 +74,102 @@ class ProjectTaskService {
         //任务处理
         println("任务处理。。。")
         tasks.each { task ->
-            //如果下一任务不是结束任务
-            if (task.taskType == NodeType.task) {
-                println("将项目指向下一任务")
-                //将项目指向下一任务
-                project.taskName += "${task.name} "
-                //创建新任务实例，创建新表单实例
-                println("创建新任务实例，创建新表单实例")
-                createTaskInstance(projectFlow, task, user, now)
-            } else if (task.taskType == NodeType.end) {
-                //如果下一任务是结束任务
-                //标记流程完成
-                println("标记流程完成")
-                projectFlow.status = 1
-                //查找下一流程
-                println("查找下一流程")
-                def flowDefinition = FlowDefinition.findByPrevId(projectFlow.flowId)
-                if (flowDefinition) {
-                    //如果存在，取得下一流程的第一个任务节点
-                    println("如果存在，取得下一流程的第一个任务节点")
-                    def newTask = getFirstTask(flowDefinition)
-                    if (newTask) {
-                        //则将项目指向下一流程
-                        println("则将项目指向下一流程")
-                        project.flowId = flowDefinition.id
-                        project.flowName = flowDefinition.name
-                        project.flowVersion = flowDefinition.flowVersion
-                        project.taskName = newTask.name
-                        //创建新流程实例
-                        println("创建新流程实例")
-                        def newFlow = createFlowInstance(project, flowDefinition, user, now)
-                        //新任务实例，新表单实例
-                        println("新任务实例，新表单实例")
-                        createTaskInstance(newFlow, newTask, user, now)
-                    }
-                } else {
-                    //如果不存在，则标记项目完成
-                    println("如果不存在，则标记项目完成")
-                    project.status = 2
-                }
-            }
+            //处理每一个任务节点
+            processTask(task, project, projectTask, projectFlow, user, now)
         }
 
         //保存数据
         println("保存数据")
         projectFlow.save flush: true
         project.save flush: true
+    }
+
+    private processTask(WorkTask task, Project project, ProjectTask projectTask, ProjectFlow projectFlow,
+                        SystemUser user, Date now) {
+        //如果下一节点是普通任务节点
+        if (NodeType.isTaskNode(task.taskType)) {
+            println("将项目指向下一任务")
+            //将项目指向下一任务
+            project.taskName += "[${task.name}]"
+            //创建新任务实例，创建新表单实例
+            println("创建新任务实例，创建新表单实例")
+            createTaskInstance(projectFlow, task, user, now)
+        } else if (NodeType.isEndNode(task.taskType)) {
+            //如果下一任务是结束任务
+            //标记流程完成
+            println("标记流程完成")
+            projectFlow.status = 1
+            //查找下一流程
+            println("查找下一流程")
+            def flowDefinition = FlowDefinition.findByPrevId(projectFlow.flowId)
+            if (flowDefinition) {
+                //如果存在，取得下一流程的第一个任务节点
+                println("如果存在，取得下一流程的第一个任务节点")
+                def newTask = getFirstTask(flowDefinition)
+                if (newTask) {
+                    //则将项目指向下一流程
+                    println("则将项目指向下一流程")
+                    project.flowId = flowDefinition.id
+                    project.flowName = flowDefinition.name
+                    project.flowVersion = flowDefinition.flowVersion
+                    project.taskName = "[${newTask.name}]"
+                    //创建新流程实例
+                    println("创建新流程实例")
+                    def newFlow = createFlowInstance(project, flowDefinition, user, now)
+                    //新任务实例，新表单实例
+                    println("新任务实例，新表单实例")
+                    createTaskInstance(newFlow, newTask, user, now)
+                }
+            } else {
+                //如果不存在，则标记项目完成
+                println("如果不存在，则标记项目完成")
+                project.taskName = ""
+                project.status = 2
+            }
+        } else if (NodeType.isForkNode(task.taskType)) {
+            //这是一个分支节点，找出下一级任务，并逐一处理。
+            def tasks = getNextTasks(task.taskId)
+            tasks.each {
+                processTask(it, project, projectTask, projectFlow, user, now)
+            }
+        } else if (NodeType.isJoinNode(task.taskType)) {
+            //这是一个合并节点，需要检查是否所有的任务都结束，都结束才进行下一个节点。
+            //找出那些指向本合并结点的任务
+            println("需要检查是否所有的任务都结束")
+            def tasks = getPrevTasks(task.taskId)
+            println("size is: ${tasks.size()}")
+            //检查是否都结束
+            if (isAllFinish(projectFlow, tasks)) {
+                //如果都己经结束，则找出下一节点并时行处理。
+                println("如果都己经结束，则找出下一节点并时行处理")
+                def nextTasks = getNextTasks(task.taskId)
+                nextTasks.each {
+                    processTask(it, project, projectTask, projectFlow, user, now)
+                }
+            } else {
+                //如果没有结束则等待。
+                println("流程有任务未结束，等待中。")
+            }
+
+        }
+    }
+
+    private isAllFinish(ProjectFlow projectFlow, List<WorkTask> workTaskList) {
+        def result = true
+        workTaskList.each { task ->
+            def projectTask = ProjectTask.findByProjectFlowAndTaskId(projectFlow, task.id)
+            println("id: ${projectTask.id}, status: ${projectTask.status}")
+            if (projectTask.status == 0) {
+                result = false
+            }
+        }
+        println("是否都己经结束：${result}")
+        result
+    }
+
+    private getPrevTasks(String taskId) {
+        def transactions = Transaction.findAllByToId(taskId)
+        WorkTask.findAllByTaskIdInList(transactions*.fromId)
     }
 
     private getNextTasks(String taskId) {

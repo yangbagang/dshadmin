@@ -20,10 +20,16 @@ class FlowDefinitionService {
             def flow = FlowDefinition.get(id)
             if (flow) {
                 //创建新版本
-                createDefinition(name, memo, flow.context, prevId, workFlow)
+                def newFlow = createDefinition(name, memo, flow.context, prevId, workFlow)
                 //作废旧版本
                 flow.flag = 0 as Short
                 flow.save flush: true
+                //将原指向旧版本的信息指向新版本
+                def flowList = FlowDefinition.findAllByPrevId(flow.id)
+                flowList.each {
+                    it.prevId = newFlow.id
+                    it.save flush: true
+                }
             }
         } else {
             //新增
@@ -48,6 +54,12 @@ class FlowDefinitionService {
         //作废旧版本
         flowDefinition.flag = 0 as Short
         flowDefinition.save flush: true
+        //将原指向旧版本的信息指向新版本
+        def flowList = FlowDefinition.findAllByPrevId(flowDefinition.id)
+        flowList.each {
+            it.prevId = newFlow.id
+            it.save flush: true
+        }
         //解析内容
         def jsonSlurper = new JsonSlurper()
         def json = jsonSlurper.parseText(context)
@@ -112,5 +124,6 @@ class FlowDefinitionService {
         definition.context = context
         definition.prevId = prevId
         definition.save flush: true
+        definition
     }
 }

@@ -1,24 +1,47 @@
 package com.ybg.dsh.wf
 
 import grails.gorm.transactions.Transactional
-import groovy.sql.Sql
+
+import java.text.SimpleDateFormat
 
 @Transactional
 class WorkFlowService {
 
-    def dataSource
+    private sdf = new SimpleDateFormat("yyyyMMddHHmmss")
 
-    def updateFlag(Long id, Short flag) {
-        def sql = new Sql(dataSource)
-        def updateSql = "update work_flow set flag = ? where id = ?"
-        sql.execute(updateSql, flag, id)
+    def save(Long id, String name, String memo) {
+        if (id) {
+            println("更新实例")
+            def oldWorkFlow = WorkFlow.get(id)
+            if (oldWorkFlow) {
+                //创建新实例
+                def newWorkFlow = createInstance(name, memo)
+                //变更旧实例
+                oldWorkFlow.flag = 0 as Short
+                oldWorkFlow.save flush: true
+                //将原指旧版本的引用指向新版本
+                def flowList = FlowDefinition.findAllByWorkFlow(oldWorkFlow)
+                flowList.each { flow->
+                    flow.workFlow = newWorkFlow
+                    flow.save flush: true
+                }
+            }
+        } else {
+            //创建新实例
+            println("创建新实例")
+            createInstance(name, memo)
+        }
     }
 
-    def create(String name, String memo, String flowVersion) {
-        def sql = new Sql(dataSource)
-        def insertSql = "insert into work_flow(version, is_deleted, create_time, name, flow_version, flag, memo)" +
-                " values(0, 0, now(), ?, ?, 1, ?)"
-        sql.execute(insertSql, name, flowVersion, memo)
+    private createInstance(String name, String memo) {
+        def instance = new WorkFlow()
+        def now = new Date()
+        instance.name = name
+        instance.memo = memo
+        instance.createTime = now
+        instance.flowVersion = sdf.format(now)
+        instance.save flush: true
+        instance
     }
 
 }

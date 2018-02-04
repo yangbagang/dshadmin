@@ -46,6 +46,7 @@ class ProjectTaskDataController {
         def data = c.list(params) {
             and {
                 eq("type", "file")
+                gt("fileSize", 0L)
                 or {
                     ilike("label", "%"+name+"%")
                     ilike("fileName", "%"+name+"%")

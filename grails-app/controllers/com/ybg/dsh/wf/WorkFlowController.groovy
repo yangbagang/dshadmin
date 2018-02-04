@@ -12,8 +12,6 @@ class WorkFlowController {
 
     static allowedMethods = [save: "POST", delete: "DELETE"]
 
-    static sdf = new SimpleDateFormat("yyyyMMddHHmmss")
-
     def workFlowService
 
     def index() {
@@ -58,15 +56,7 @@ class WorkFlowController {
             return
         }
 
-        def now = new Date()
-
-        //创建新流程
-        workFlowService.create(name, memo, sdf.format(now))
-
-        if (id) {
-            //更新旧流程
-            workFlowService.updateFlag(id, 0 as Short)
-        }
+        workFlowService.save(id, name, memo)
 
         result.success = true
         result.msg = ""
