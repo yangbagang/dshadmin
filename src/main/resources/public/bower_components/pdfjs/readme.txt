@@ -1,0 +1,1 @@
+http://localhost:8080/dshadmin/static/bower_components/pdfjs/web/viewer.html?file=./webpack.pdf

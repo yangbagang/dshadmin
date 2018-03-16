@@ -38,6 +38,26 @@ class SystemUserService {
             role.updateUser = "system"
             role.save flush: true
 
+            def role2 = new SystemRole()
+            role2.authority = "ROLE_FILE_ADMIN"
+            role2.roleName = "法律法规管理员"
+            role2.remark = "管理系统内收入的法律法规，没有该权限将只能下载。"
+            role2.createTime = now
+            role2.updateTime = now
+            role2.createUser = "system"
+            role2.updateUser = "system"
+            role2.save flush: true
+
+            def role3 = new SystemRole()
+            role3.authority = "ROLE_PROJECT_ADMIN"
+            role3.roleName = "项目管理员"
+            role3.remark = "管理系统内的各项目，没有此权限将只能查看项目信息，不能处理相关事务。"
+            role3.createTime = now
+            role3.updateTime = now
+            role3.createUser = "system"
+            role3.updateUser = "system"
+            role3.save flush: true
+
             SystemUserRole.create(user, role)
         }
     }
