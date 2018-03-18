@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/css", file: "default.css")}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/fonts", file: "iconflow.css")}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/css", file: "GooFlow.css")}"/>
-    <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "jquery.min.js")}"></script>
+
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/js", file: "GooFunc.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "json2.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "printThis.js")}"></script>

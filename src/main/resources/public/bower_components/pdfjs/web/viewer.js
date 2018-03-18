@@ -894,7 +894,7 @@ var DEFAULT_SCALE_DELTA = 1.1;
 var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 function configure(PDFJS) {
   PDFJS.imageResourcesPath = './images/';
-  PDFJS.workerSrc = '../build/pdf.worker.js';
+  PDFJS.workerSrc = '../dist/pdf.worker.js';
   PDFJS.cMapUrl = '../web/cmaps/';
   PDFJS.cMapPacked = true;
 }
@@ -1848,7 +1848,7 @@ var PDFViewerApplication = {
 };
 var validateFileURL = void 0;
 {
-  var HOSTED_VIEWER_ORIGINS = ['null', 'http://mozilla.github.io', 'https://mozilla.github.io', 'http://localhost:8080', 'http://39.104.105.228:8080'];
+  var HOSTED_VIEWER_ORIGINS = ['null', 'http://mozilla.github.io', 'https://mozilla.github.io', 'http://localhost:8080', 'http://39.104.105.228:8080', 'http://183.57.41.230'];
   validateFileURL = function validateFileURL(file) {
     if (file === undefined) {
       return;
