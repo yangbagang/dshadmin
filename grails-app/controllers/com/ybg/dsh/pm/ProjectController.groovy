@@ -1,6 +1,7 @@
 package com.ybg.dsh.pm
 
 import com.ybg.dsh.vo.AjaxPagingVo
+import com.ybg.dsh.wf.FlowDefinition
 import grails.converters.JSON
 import org.springframework.transaction.annotation.Transactional
 
@@ -253,6 +254,7 @@ class ProjectController {
 
     def latest() {
         def project = Project.last()
-        [project: project]
+        def taskIds = projectFlowService.viewFlow(project)
+        [project: project, taskIds: taskIds]
     }
 }

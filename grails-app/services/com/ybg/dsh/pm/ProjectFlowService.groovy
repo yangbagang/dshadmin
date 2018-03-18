@@ -123,4 +123,14 @@ class ProjectFlowService {
         WorkTask.findByFlowDefinitionAndTaskIdAndTaskType(flowDefinition, transaction.toId, NodeType.task)
     }
 
+    def viewFlow(Project project) {
+        def tasks = []
+        def projectFlow = ProjectFlow.findByProject(project)
+        def projectTasks = ProjectTask.findAllByProjectFlowAndStatus(projectFlow, 0)
+        projectTasks.each { projectTask ->
+            def workTask = WorkTask.get(projectTask.taskId)
+            tasks.add(workTask.taskId)
+        }
+        tasks
+    }
 }

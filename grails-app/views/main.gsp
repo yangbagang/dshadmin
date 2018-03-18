@@ -29,5 +29,6 @@
         </div>
     </div>
 </div>
-
+<br/>
+<g:include controller="project" action="latest"/>
 <!-- content ends -->
