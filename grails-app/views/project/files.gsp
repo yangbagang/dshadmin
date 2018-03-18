@@ -71,7 +71,7 @@
                 { "title": "文件大小", "data" : "fileSize", "orderable": true, "searchable": false },
                 { "title": "上传时间", "data" : "createTime", "orderable": true, "searchable": false },
                 { "title": "下载文件", "data" : function (data) {
-                       return '<a href="'+ serverPath + 'download/'+data.value+'">下载</a>';
+                       return '<a href="'+ serverPath + 'download/'+data.value+'" target="_blank">下载</a>';
                     }, "orderable": false, "searchable": false },
                 { "title": "预览", "data" : function (data) {
                         var isPdf = data.fileType.indexOf("pdf") != -1;
