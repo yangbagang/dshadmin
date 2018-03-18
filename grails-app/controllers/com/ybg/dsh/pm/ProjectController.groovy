@@ -250,4 +250,9 @@ class ProjectController {
     def files() {
         //转向文档下载界面
     }
+
+    def latest() {
+        def project = Project.last()
+        [project: project]
+    }
 }

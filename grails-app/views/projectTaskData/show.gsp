@@ -27,6 +27,7 @@
 </div>
 
 <div class="modal-footer">
+    <a href="javascript:createFileItem(${taskId});" class="btn btn-primary">新增</a>&nbsp;&nbsp;
     <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
 </div>
 
@@ -104,6 +105,26 @@ function updateInfo(id, msg, value) {
         },
         error: function(data) {
             $(msg).html(data.responseText);
+        }
+    });
+}
+function createFileItem(taskId) {
+    var url = '${createLink(controller: "projectTaskData", action: "create")}';
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: url,
+        data: "taskId=" + taskId,
+        success: function (result) {
+            if (result.id != undefined && result.id != null && result.id != "") {
+                var item = "<div class=\"form-group\">" +
+                    "<label for=\"file_"+result.id+"\">新增文件</label>" +
+                    "<input type=\"file\" class=\"form-control\" id=\"file_"+result.id+"\" name=\"file_"+result.id+"\" placeholder=\"选择文件。\" " +
+                    "onchange=\"postAjaxUpload("+result.id+", this, $('#msg_"+result.id+"'));\">\n" +
+                    "<br/><div id=\"msg_"+result.id+"\"></div>\n" +
+                    "</div>";
+                $("#infoForm").append(item);
+            }
         }
     });
 }

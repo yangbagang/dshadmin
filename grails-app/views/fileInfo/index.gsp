@@ -71,8 +71,17 @@
                 { "title": "文件名", "data" : "fileName", "orderable": true, "searchable": false },
                 { "title": "文件大小", "data" : "fileSize", "orderable": true, "searchable": false },
                 { "title": "备注", "data" : "memo", "orderable": true, "searchable": false },
-                { "title": "下载文件", "data" : function (data) {
+                { "title": "下载", "data" : function (data) {
                        return '<a href="'+ serverPath + 'download/'+data.fileId+'">下载</a>';
+                    }, "orderable": false, "searchable": false },
+                { "title": "预览", "data" : function (data) {
+                    var isPdf = data.type.indexOf("pdf") != -1;
+                    if (isPdf) {
+                        var fileUrl = serverPath + 'download/'+data.fileId;
+                        var viewUrl = "/dshadmin/static/bower_components/pdfjs/web/viewer.html?file="+fileUrl;
+                        return '<a href="'+ viewUrl+'" target="_blank">预览</a>';
+                    }
+                    return '';
                     }, "orderable": false, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +
@@ -108,6 +117,10 @@
     });
 
     function addInfo() {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_FILE_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
@@ -209,6 +222,10 @@
     }
 
     function editInfo(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_FILE_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var url = '${createLink(controller: "fileInfo", action: "show")}';
         $.ajax({
             type: "GET",
@@ -257,6 +274,10 @@
     }
 
     function removeInfo(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_FILE_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +

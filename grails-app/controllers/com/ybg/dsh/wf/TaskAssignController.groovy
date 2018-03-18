@@ -3,8 +3,10 @@ package com.ybg.dsh.wf
 import com.ybg.dsh.sys.SystemUser
 import com.ybg.dsh.vo.AjaxPagingVo
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.transaction.annotation.Transactional
 
+@Secured(['ROLE_SUPER_ADMIN', 'ROLE_FLOW_ADMIN'])
 class TaskAssignController {
 
     def list(Long taskId) {

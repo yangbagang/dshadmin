@@ -62,17 +62,17 @@
             demo.onItemRightClick=function(id,type){
                 console.log("onItemRightClick: "+id+","+type);
                 return true;//返回false可以阻止浏览器默认的右键菜单事件
-            }
+            };
             demo.onItemDbClick=function(id,type){
                 console.log("onItemDbClick: "+id+","+type);
                 return true;//返回false可以阻止原组件自带的双击直接编辑事件
-            }
+            };
             demo.onPrintClick=function(){
                 demo.print(0.8);
-            }
+            };
             demo.onBtnSaveClick=function () {
 
-            }
+            };
         });
         var out;
         function Export(){

@@ -2,6 +2,7 @@ package com.ybg.dsh.file
 
 import com.ybg.dsh.vo.AjaxPagingVo
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional(readOnly = true)
@@ -40,6 +41,7 @@ class FileInfoController {
     }
 
     @Transactional
+    @Secured(['ROLE_SUPER_ADMIN', 'ROLE_FILE_ADMIN'])
     def save(FileInfo fileInfo) {
         def result = [:]
         if (fileInfo == null) {
@@ -65,6 +67,7 @@ class FileInfoController {
     }
 
     @Transactional
+    @Secured(['ROLE_SUPER_ADMIN', 'ROLE_FILE_ADMIN'])
     def delete(FileInfo fileInfo) {
         def result = [:]
         if (fileInfo == null) {

@@ -117,6 +117,7 @@
                                 <li><a class="ajax-link" href="${createLink(uri: '/fileInfo')}">法律法规</a></li>
                             </ul>
                         </li>
+                        <sec:access expression="hasAnyRole('ROLE_FLOW_ADMIN','ROLE_SUPER_ADMIN')">
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 流程管理</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -125,6 +126,7 @@
                                 <li><a class="ajax-link" href="${createLink(uri: '/workTask')}">节点配置</a></li>
                             </ul>
                         </li>
+                        </sec:access>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 项目管理</span></a>
                             <ul class="nav nav-pills nav-stacked">

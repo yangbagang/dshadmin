@@ -1,14 +1,3 @@
-<!-- content starts -->
-<div>
-    <ul class="breadcrumb">
-        <li>
-            <a href="#">Home</a>
-        </li>
-        <li>
-            <a href="#">Dashboard</a>
-        </li>
-    </ul>
-</div>
 <div class="box-inner">
     <div class="box-header well">
         <h2><i class="glyphicon glyphicon-ok-sign"></i> Welcome</h2>

@@ -2,12 +2,11 @@ package com.ybg.dsh.wf
 
 import com.ybg.dsh.vo.AjaxPagingVo
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured
 import org.apache.commons.lang.StringUtils
 import org.springframework.transaction.annotation.Transactional
 
-import java.text.SimpleDateFormat
-
-@Transactional(readOnly = true)
+@Secured(['ROLE_SUPER_ADMIN', 'ROLE_FLOW_ADMIN'])
 class WorkFlowController {
 
     static allowedMethods = [save: "POST", delete: "DELETE"]

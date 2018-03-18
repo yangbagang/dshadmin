@@ -15,7 +15,19 @@ class ProjectTaskDataController {
         def projectTask = ProjectTask.read(taskId)
         //列出某任务需要的全部表单
         def list = ProjectTaskData.findAllByProjectTask(projectTask)
-        [list: list]
+        [taskId: taskId, list: list]
+    }
+
+    def create(Long taskId) {
+        def projectTask = ProjectTask.read(taskId)
+        def count = ProjectTaskData.countByProjectTaskAndType(projectTask, "file")
+        def data = new ProjectTaskData()
+        data.projectTask = projectTask
+        data.type = "file"
+        data.name = "file_${count + 1}"
+        data.label = "文件_${count + 1}"
+        data.save flush: true
+        render data as JSON
     }
 
     def update(Long id, String value) {
