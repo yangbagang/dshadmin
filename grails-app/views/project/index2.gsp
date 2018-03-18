@@ -78,6 +78,10 @@
                         if (data.status == 9) return "己中止";
                         return "其它";
                     }, "orderable": true, "searchable": false },
+                { "title": "查看", "data" : function (data) {
+                        var u = '${createLink(controller: "project", action: "view")}';
+                        return '<a href="'+u+'?projectId='+data.id+'" target="_blank">查看</a>';
+                    }, "orderable": false, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
                             '<i class="glyphicon glyphicon-stop icon-white"></i></a>';

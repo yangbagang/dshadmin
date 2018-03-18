@@ -257,4 +257,10 @@ class ProjectController {
         def taskIds = projectFlowService.viewFlow(project)
         [project: project, taskIds: taskIds]
     }
+
+    def view(Long projectId) {
+        def project = Project.read(projectId)
+        def taskIds = projectFlowService.viewFlow(project)
+        [project: project, taskIds: taskIds]
+    }
 }

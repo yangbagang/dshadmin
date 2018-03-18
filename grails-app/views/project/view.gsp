@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/css", file: "default.css")}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/fonts", file: "iconflow.css")}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: "bower_components/gooflow/css", file: "GooFlow.css")}"/>
-
+    <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "jquery.min.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/js", file: "GooFunc.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "json2.js")}"></script>
     <script type="text/javascript" src="${resource(dir: "bower_components/gooflow/plugin", file: "printThis.js")}"></script>
@@ -32,31 +32,31 @@
         };
         GooFlow.prototype.remarks.extendRight="工作区向右扩展";
         GooFlow.prototype.remarks.extendBottom="工作区向下扩展";
-        var demo2;
+        var demo_view;
         $(document).ready(function(){
-            demo2=$.createGooFlow($("#flowJSON"),property);
-            loadFlowDefinition();
+            demo_view=$.createGooFlow($("#flowJSON_view"),property);
+            loadFlowView();
         });
-        function loadFlowDefinition() {
-            demo2.loadDataAjax({
+        function loadFlowView() {
+            demo_view.loadDataAjax({
                 type: "GET",
                 url: flowUrl + "?flowId=" + flowId,
                 success: function (result) {
-                    demo2.loadData(result);
+                    demo_view.loadData(result);
                     <g:each in="${taskIds}" var="taskId">
-                    demo2.markItem('${taskId}', 'node', true);
+                    demo_view.markItem('${taskId}', 'node', true);
                     </g:each>
-                    demo2.setTitle('${project?.name}进展');
+                    demo_view.setTitle('${project?.name}进展');
                 },
                 error: function (data) {
-                    $("#msg").html(data.responseText);
+                    $("#msg_view").html(data.responseText);
                 }
             });
         }
     </script>
 </head>
 <body>
-<div id="flowJSON" style="width:100%;height:600px;"></div>
-<div id="msg"></div>
+<div id="flowJSON_view" style="width:100%;height:600px;"></div>
+<div id="msg_view"></div>
 </body>
 </html>
