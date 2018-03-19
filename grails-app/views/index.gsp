@@ -134,8 +134,10 @@
                                 <li><a class="ajax-link" href="${createLink(uri: '/project/index4')}">未启动项目</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/project/index2')}">进行中项目</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/project/index3')}">己完结项目</a></li>
+                                <sec:access expression="hasAnyRole('ROLE_PROJECT_ADMIN','ROLE_SUPER_ADMIN')">
                                 <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index1')}">待办任务</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/projectTask/index2')}">己办任务</a></li>
+                                </sec:access>
                             </ul>
                         </li>
                         <li class="accordion">

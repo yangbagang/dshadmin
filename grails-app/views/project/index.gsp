@@ -116,6 +116,10 @@
     });
 
     function addInfo() {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
@@ -150,6 +154,10 @@
     }
 
     function startProject(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var url = '${createLink(controller: "project", action: "start")}';
         $.ajax({
             type: "GET",
@@ -183,6 +191,10 @@
     }
 
     function editInfo(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var url = '${createLink(controller: "project", action: "show")}';
         $.ajax({
             type: "GET",
@@ -229,6 +241,10 @@
     }
 
     function removeInfo(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +

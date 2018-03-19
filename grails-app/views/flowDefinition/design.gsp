@@ -106,7 +106,7 @@
     </script>
 </head>
 <body>
-<div id="flowJSON" style="width:100%;height:540px;"></div>
+<div id="flowJSON" style="width:100%;height:100%;"></div>
 <div id="msg"></div>
 </body>
 </html>

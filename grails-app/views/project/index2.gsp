@@ -112,6 +112,10 @@
     });
 
     function addInfo() {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
@@ -146,6 +150,10 @@
     }
 
     function removeInfo(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
         var content = "" +
                 '<div class="modal-header">' +
                 '<button type="button" class="close" data-dismiss="modal">×</button>' +
