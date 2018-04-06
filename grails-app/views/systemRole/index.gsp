@@ -68,9 +68,7 @@
                 { "title": "权限", "data" : "authority", "orderable": true, "searchable": false },
                 { "title": "角色名称", "data" : "roleName", "orderable": true, "searchable": false },
                 { "title": "备注", "data" : "remark", "orderable": true, "searchable": false },
-                { "title": "创建者", "data" : "createUser", "orderable": true, "searchable": false },
-                { "title": "创建时间", "data" : "createTime", "orderable": true, "searchable": false },
-                { "title": "更新者", "data" : "updateUser", "orderable": true, "searchable": false },
+                { "title": "更新人", "data" : "updateUser", "orderable": true, "searchable": false },
                 { "title": "更新时间", "data" : "updateTime", "orderable": true, "searchable": false },
                 { "title": "操作", "data" : function (data) {
                     return '<a class="btn btn-success" href="javascript:showInfo('+data.id+');" title="查看">' +

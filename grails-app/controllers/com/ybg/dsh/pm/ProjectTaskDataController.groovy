@@ -1,6 +1,7 @@
 package com.ybg.dsh.pm
 
 import com.ybg.dsh.vo.AjaxPagingVo
+import com.ybg.dsh.wf.WorkTask
 import grails.converters.JSON
 
 class ProjectTaskDataController {
@@ -18,7 +19,18 @@ class ProjectTaskDataController {
         [taskId: taskId, list: list]
     }
 
-    def create(Long taskId) {
+    def show2(String taskId, Long projectId) {
+        println("show2")
+        def workTask = WorkTask.findByTaskId(taskId)
+        def project = Project.get(projectId)
+        def projectFlow = ProjectFlow.findByProject(project)
+        def projectTask = ProjectTask.findByProjectFlowAndTaskId(projectFlow, workTask.id)
+        //列出某任务需要的全部表单
+        def list = ProjectTaskData.findAllByProjectTask(projectTask)
+        [taskId: projectTask.id, list: list]
+    }
+
+    def createFile(Long taskId) {
         def projectTask = ProjectTask.read(taskId)
         def count = ProjectTaskData.countByProjectTaskAndType(projectTask, "file")
         def data = new ProjectTaskData()
@@ -26,6 +38,18 @@ class ProjectTaskDataController {
         data.type = "file"
         data.name = "file_${count + 1}"
         data.label = "文件_${count + 1}"
+        data.save flush: true
+        render data as JSON
+    }
+
+    def createText(Long taskId) {
+        def projectTask = ProjectTask.read(taskId)
+        def count = ProjectTaskData.countByProjectTaskAndType(projectTask, "text")
+        def data = new ProjectTaskData()
+        data.projectTask = projectTask
+        data.type = "text"
+        data.name = "text_${count + 1}"
+        data.label = "文本_${count + 1}"
         data.save flush: true
         render data as JSON
     }
@@ -41,6 +65,16 @@ class ProjectTaskDataController {
 
     def updateFile(Long id, String value, Long fileSize, String fileName, String fileType) {
         projectTaskDataService.updateFileValue(id, value, fileSize, fileName, fileType)
+
+        def result = [:]
+        result.success = true
+        result.msg = ""
+        render result as JSON
+    }
+
+    def remove(Long id) {
+        def data = ProjectTaskData.get(id)
+        data?.delete flush: true
 
         def result = [:]
         result.success = true

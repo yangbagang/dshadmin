@@ -46,7 +46,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="${createLink(uri: '/')}"> <asset:image alt="Charisma Logo" src="logo20.png" class="hidden-xs"/>
+        <a class="navbar-brand" href="${createLink(uri: '/')}"> <asset:image alt="大沙河" src="logo.png" class="hidden-xs"/>
             <span>报批报建管理系统</span></a>
 
         <!-- user dropdown starts -->
@@ -211,7 +211,7 @@
 <!-- application script for Charisma demo -->
 <asset:javascript src="charisma.js" />
 <script>
-    var mainUrl = "${createLink(controller: 'project', action: 'latest')}";
+    var mainUrl = "${createLink(controller: 'project', action: 'projectTab')}";
     $.ajax({
         type: "get",
         url: mainUrl,
