@@ -128,6 +128,7 @@ class ProjectTaskService {
             }
         } else if (NodeType.isForkNode(task.taskType)) {
             //这是一个分支节点，找出下一级任务，并逐一处理。
+            println("这是一个分支节点，找出下一级任务，并逐一处理。")
             def tasks = getNextTasks(task.taskId)
             tasks.each {
                 processTask(it, project, projectTask, projectFlow, user, now)
@@ -142,6 +143,9 @@ class ProjectTaskService {
             if (isAllFinish(projectFlow, tasks)) {
                 //如果都己经结束，则找出下一节点并时行处理。
                 println("如果都己经结束，则找出下一节点并时行处理")
+                //创建合并实例并标记为完成状态
+                createJoinTask(projectFlow, task, user, now)
+                //处理下一节点
                 def nextTasks = getNextTasks(task.taskId)
                 nextTasks.each {
                     processTask(it, project, projectTask, projectFlow, user, now)
@@ -155,16 +159,23 @@ class ProjectTaskService {
     }
 
     private isAllFinish(ProjectFlow projectFlow, List<WorkTask> workTaskList) {
-        def result = true
-        workTaskList.each { task ->
+        for (def task in workTaskList) {
+            println("projectFlowId=${projectFlow.id}, taskId=${task.id}")
             def projectTask = ProjectTask.findByProjectFlowAndTaskId(projectFlow, task.id)
-            println("id: ${projectTask.id}, status: ${projectTask.status}")
+            if (projectTask == null) {
+                println("projectTask is null...")
+                return false
+            } else {
+                println("projectTask is not null...")
+            }
             if (projectTask.status == 0) {
-                result = false
+                println("projectTask is running...")
+                return false
+            } else {
+                println("projectTask is finish...")
             }
         }
-        println("是否都己经结束：${result}")
-        result
+        return true
     }
 
     private getPrevTasks(String taskId) {
@@ -190,7 +201,13 @@ class ProjectTaskService {
 
     private createTaskInstance(ProjectFlow projectFlow, WorkTask task, SystemUser user, Date date) {
         //生成任务实例
-        def projectTask = new ProjectTask()
+        def projectTask = ProjectTask.findByProjectFlowAndTaskId(projectFlow, task.id)
+        if (projectTask) {
+            //实例己经存在，忽略。
+            println("任务实例己经存在，忽略。")
+            return
+        }
+        projectTask = new ProjectTask()
         projectTask.projectFlow = projectFlow
         projectTask.taskId = task.id
         projectTask.taskName = task.name
@@ -213,6 +230,27 @@ class ProjectTaskService {
                 data.save flush: true
             }
         }
+    }
+
+    private createJoinTask(ProjectFlow projectFlow, WorkTask task, SystemUser user, Date date) {
+        //生成任务实例
+        def projectTask = ProjectTask.findByProjectFlowAndTaskId(projectFlow, task.id)
+        if (projectTask) {
+            //实例己经存在，忽略。
+            println("合并实例己经存在，忽略。")
+            return
+        }
+        projectTask = new ProjectTask()
+        projectTask.projectFlow = projectFlow
+        projectTask.taskId = task.id
+        projectTask.taskName = task.name
+        projectTask.status = 1//标记状态为完成
+        projectTask.taskVersion = task.taskVersion
+        projectTask.createUser = user
+        projectTask.updateUser = user
+        projectTask.createTime = date
+        projectTask.updateTime = date
+        projectTask.save flush: true
     }
 
     private createFlowInstance(Project project, FlowDefinition flowDefinition, SystemUser user, Date time) {

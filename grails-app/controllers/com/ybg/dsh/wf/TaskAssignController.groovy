@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 @Secured(['ROLE_SUPER_ADMIN', 'ROLE_FLOW_ADMIN'])
 class TaskAssignController {
 
+    def taskAssignService
+
     def list(Long taskId) {
         def task = WorkTask.get(taskId)
         def data = TaskAssign.findAllByWorkTaskAndFlag(task, 1 as Short)
@@ -76,6 +78,15 @@ class TaskAssignController {
         }
 
         render list as JSON
+    }
+
+    def assignAll(Long flowId, Long userId) {
+        taskAssignService.assignAll(flowId, userId)
+
+        def result = [:]
+        result.success = true
+        result.msg = ""
+        render result as JSON
     }
 
 }

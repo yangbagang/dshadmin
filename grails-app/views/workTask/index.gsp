@@ -46,7 +46,8 @@
         <div class="form-group">
             <label class="control-label" for="userId">操作人:</label>
             <select id="userId" name="userId"></select>
-            <input type="button" value="绑定" onclick="addAssign();">
+            <input type="button" value="绑定" onclick="addAssign();">&nbsp;&nbsp;
+            <input type="button" value="全部绑定" onclick="assignAll();">
         </div>
     </form><br />
     <div id="assignInfo" class="box-content alerts"></div>
@@ -557,4 +558,44 @@
         });
     }
 
+    function assignAll() {
+        var flowId = $("#flowId").val();
+        var userId = $("#userId").val();
+        var url = '${createLink(controller: "taskAssign", action: "assignAll")}';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: "flowId="+flowId+"&userId="+userId,
+            success: function (result) {
+                var isSuccess = result.success;
+                var errorMsg = result.msg;
+                var content = "";
+                if (eval(isSuccess)) {
+                    content = "" +
+                        '<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '操作完成' +
+                        '</div>';
+                } else {
+                    content = "" +
+                        '<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        JSON.stringify(errorMsg) +
+                        '</div>';
+                }
+                $("#myModal").modal('hide');
+                gridTable2.ajax.reload(null, false);
+                $("#assignInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            },
+            error: function(data) {
+                var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
+                $("#assignInfo").html(errorContent);
+                $("#assignInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
 </script>

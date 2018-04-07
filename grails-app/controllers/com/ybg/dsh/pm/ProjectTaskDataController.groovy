@@ -7,6 +7,7 @@ import grails.converters.JSON
 class ProjectTaskDataController {
 
     def projectTaskDataService
+    def projectTaskDataIndexService
 
     def index() {
 
@@ -27,29 +28,29 @@ class ProjectTaskDataController {
         def projectTask = ProjectTask.findByProjectFlowAndTaskId(projectFlow, workTask.id)
         //列出某任务需要的全部表单
         def list = ProjectTaskData.findAllByProjectTask(projectTask)
-        [taskId: projectTask.id, list: list]
+        [taskId: projectTask.id, projectId: project.id, list: list]
     }
 
     def createFile(Long taskId) {
         def projectTask = ProjectTask.read(taskId)
-        def count = ProjectTaskData.countByProjectTaskAndType(projectTask, "file")
+        def dataIndex = projectTaskDataIndexService.getLastIndex(projectTask, "file")
         def data = new ProjectTaskData()
         data.projectTask = projectTask
         data.type = "file"
-        data.name = "file_${count + 1}"
-        data.label = "文件_${count + 1}"
+        data.name = "file_${dataIndex}"
+        data.label = "文件_${dataIndex}"
         data.save flush: true
         render data as JSON
     }
 
     def createText(Long taskId) {
         def projectTask = ProjectTask.read(taskId)
-        def count = ProjectTaskData.countByProjectTaskAndType(projectTask, "text")
+        def dataIndex = projectTaskDataIndexService.getLastIndex(projectTask, "text")
         def data = new ProjectTaskData()
         data.projectTask = projectTask
         data.type = "text"
-        data.name = "text_${count + 1}"
-        data.label = "文本_${count + 1}"
+        data.name = "text_${dataIndex}"
+        data.label = "文本_${dataIndex}"
         data.save flush: true
         render data as JSON
     }
@@ -74,7 +75,7 @@ class ProjectTaskDataController {
 
     def remove(Long id) {
         def data = ProjectTaskData.get(id)
-        data?.delete flush: true
+        //data?.delete flush: true
 
         def result = [:]
         result.success = true

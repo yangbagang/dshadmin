@@ -81,6 +81,12 @@
                         var viewUrl = "/dshadmin/static/bower_components/pdfjs/web/viewer.html?file="+fileUrl;
                         return '<a href="'+ viewUrl+'" target="_blank">预览</a>';
                     }
+                    var fileName = data.filename.toLowerCase();
+                    if (fileName.indexOf(".doc") != -1 || fileName.indexOf(".ppt") != -1 || fileName.indexOf(".xls") != -1) {
+                        var fileUrl = serverPath + 'download/'+data.fileId;
+                        var viewUrl = "http://ow365.cn/?i=15368&furl="+fileUrl;
+                        return '<a href="'+ viewUrl+'" target="_blank">预览</a>';
+                    }
                     return '';
                     }, "orderable": false, "searchable": false },
                 { "title": "操作", "data" : function (data) {

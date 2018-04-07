@@ -9,6 +9,7 @@
             <g:if test="${data.type == 'text'}">
                 <div class="form-group">
                     <label for="${data.name}">${data.label}</label>
+                    <a href="javascript:removeItem(${data.id}, ${data.name});">[删除]</a>
                     <input type="text" class="form-control" id="${data.name}" name="${data.name}" value="${data.value}"
                            placeholder="${data.label}" onblur="updateInfo(${data.id}, $('#msg_${data.id}'), this.value);">
                     <br/><div id="msg_${data.id}"></div>
@@ -17,6 +18,8 @@
             <g:if test="${data.type == 'file'}">
                 <div class="form-group">
                     <label for="${data.name}">${data.label}</label>
+                    <g:if test="${data.value != ''}">[${data.fileName}]</g:if>
+                    <a href="javascript:removeItem(${data.id}, ${data.name});">[删除]</a>
                     <input type="file" class="form-control" id="${data.name}" name="${data.name}" placeholder="选择文件。"
                            onchange="postAjaxUpload(${data.id}, this, $('#msg_${data.id}'));">
                     <br/><div id="msg_${data.id}"></div>
@@ -146,6 +149,18 @@ function createTextItem(taskId) {
                     "</div>";
                 $("#infoForm").append(item);
             }
+        }
+    });
+}
+function removeItem(id, obj) {
+    var url = '${createLink(controller: "projectTaskData", action: "remove")}';
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: url,
+        data: "id=" + id,
+        success: function (result) {
+            $(obj).parent(".form-group").remove();
         }
     });
 }

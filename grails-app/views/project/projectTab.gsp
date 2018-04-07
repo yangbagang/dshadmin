@@ -46,14 +46,7 @@
 <script>
     var tab = $("#projectTab");
     var projectUrl = "${createLink(controller: 'project', action: 'view2')}";
-    function changeTabContent(index, id) {
-        tab.children("li").each(function (i, element) {
-            if (i == index) {
-                $(element).addClass("active");
-            } else {
-                $(element).removeClass("active");
-            }
-        });
+    function loadProjectFlow(id) {
         $.ajax({
             type: "get",
             url: projectUrl + "?projectId=" + id,
@@ -62,9 +55,18 @@
             }
         });
     }
+    function changeTabContent(index, id) {
+        tab.children("li").each(function (i, element) {
+            if (i == index) {
+                $(element).addClass("active");
+            } else {
+                $(element).removeClass("active");
+            }
+        });
+        loadProjectFlow(id);
+    }
     changeTabContent(0, ${projectList.first().id});
     function editTask(id, projectId) {
-        console.log("taskId=" + id);
         var url = '${createLink(controller: "projectTaskData", action: "show2")}';
         $.ajax({
             type: "GET",
