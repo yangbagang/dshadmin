@@ -7,6 +7,10 @@ class ProjectTaskData {
     static constraints = {
     }
 
+    static mapping = {
+        value column: "value", sqlType: "varchar(1000)"
+    }
+
     String label = ""
     String name = ""
     String type = ""
