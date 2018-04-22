@@ -272,7 +272,8 @@ class ProjectController {
         }
 
         def user = springSecurityService.currentUser
-        projectFlowService.start(user, project)
+        //projectFlowService.start(user, project)
+        projectFlowService.startAll(user, project)
         systemLogService.addLog("${user.username}", "项目${project.name}启动", NetUtil.getUserIP(request), "项目")
 
         result.success = true

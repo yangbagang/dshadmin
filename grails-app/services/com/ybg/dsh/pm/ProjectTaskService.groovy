@@ -20,7 +20,7 @@ class ProjectTaskService {
             taskIdList = []
             taskIdList.add(0L)
         }
-        def data = c.list(params) {
+        def data = c.list(max: params.length, offset: params.start) {
             and {
                 eq("status", status)
                 'in'("taskId", taskIdList)
@@ -34,8 +34,44 @@ class ProjectTaskService {
         result.error = ""
         result.success = true
         result.recordsTotal = data.totalCount
-        result.recordsFiltered = data.size()
+        result.recordsFiltered = data.totalCount
         result
+    }
+
+    def completeTask(SystemUser user, Long taskId) {
+        println("开始节点推进。。。")
+        def now = new Date()
+        def projectTask = ProjectTask.get(taskId)
+        println("开始检查projectTask是否存在。。。")
+        if (projectTask == null) return
+
+        //标记当前任务为完成状态
+        println("标记当前任务为完成状态。。。")
+        projectTask.updateTime = now
+        projectTask.updateUser = user
+        projectTask.status = 1
+        projectTask.save flush: true
+
+        println("准备数据。。。")
+        def projectFlow = projectTask.projectFlow
+        def project = projectFlow.project
+        def count = ProjectTask.countByProjectFlowAndStatus(projectFlow, 0)
+        if (count == 0) {
+            //没有正在进行的任务，标记项目与流程为己完成
+            project.status = 2
+            projectFlow.status = 1
+        }
+
+        //更新数据
+        project.updateUser = user
+        project.updateTime = now
+        projectFlow.updater = user
+        projectFlow.updateTime = now
+
+        //保存数据
+        println("保存数据")
+        projectFlow.save flush: true
+        project.save flush: true
     }
 
     def complete(SystemUser user, Long taskId) {

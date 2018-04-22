@@ -19,6 +19,7 @@ class ProjectTaskController {
     def list1() {
         def user = springSecurityService.currentUser
         def result = projectTaskService.listTask(user, 0, params)
+        println "offset=${params.start}"
         render result as JSON
     }
 
@@ -39,7 +40,8 @@ class ProjectTaskController {
         def result = [:]
 
         def user = springSecurityService.currentUser
-        projectTaskService.complete(user, taskId)
+        //projectTaskService.complete(user, taskId)
+        projectTaskService.completeTask(user, taskId)
 
         result.success = true
         result.msg = ""
