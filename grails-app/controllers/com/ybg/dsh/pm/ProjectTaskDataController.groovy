@@ -87,13 +87,17 @@ class ProjectTaskDataController {
      * 列出所有文件数据
      * @return
      */
-    def listFiles() {
+    def listFiles(Long projectId) {
+        def project = Project.get(projectId)
         def c = ProjectTaskData.createCriteria()
         def name = params.name ?: ""
         def data = c.list(params) {
             and {
                 eq("type", "file")
                 gt("fileSize", 0L)
+                if (project) {
+                    'in'("projectTask", ProjectTask.findAllByProjectFlow(ProjectFlow.findByProject(project)))
+                }
                 or {
                     ilike("label", "%"+name+"%")
                     ilike("fileName", "%"+name+"%")

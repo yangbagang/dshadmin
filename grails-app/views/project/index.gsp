@@ -88,7 +88,9 @@
                             '<a class="btn btn-info" href="javascript:editInfo('+data.id+');" title="编辑">' +
                             '<i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp;&nbsp;' +
                             '<a class="btn btn-danger" href="javascript:removeInfo('+data.id+');" title="中止">' +
-                            '<i class="glyphicon glyphicon-stop icon-white"></i></a>';
+                            '<i class="glyphicon glyphicon-stop icon-white"></i></a>&nbsp;&nbsp;' +
+                            '<a class="btn btn-danger" href="javascript:deleteInfo('+data.id+');" title="删除">' +
+                            '<i class="glyphicon glyphicon-trash icon-white"></i></a>';
                 }, "orderable": false, "searchable": false }
             ],
             "language": {
@@ -246,17 +248,17 @@
         return;
         </sec:ifNotGranted>
         var content = "" +
-                '<div class="modal-header">' +
-                '<button type="button" class="close" data-dismiss="modal">×</button>' +
-                '<h3>提示</h3>' +
-                '</div>' +
-                '<div class="modal-body">' +
-                '<p>此操作将中止项目进行，此项目中的所有任务都将结束,是否继续?</p>' +
-                '</div>' +
-                '<div class="modal-footer">' +
-                '<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>' +
-                '<a href="javascript:postAjaxRemove('+id+');" class="btn btn-primary">中止</a>' +
-                '</div>';
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal">×</button>' +
+            '<h3>提示</h3>' +
+            '</div>' +
+            '<div class="modal-body">' +
+            '<p>此操作将中止项目进行，此项目中的所有任务都将结束,是否继续?</p>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+            '<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>' +
+            '<a href="javascript:postAjaxRemove('+id+');" class="btn btn-primary">中止</a>' +
+            '</div>';
         $("#modal-content").html("");
         $("#modal-content").html(content);
         $('#myModal').modal('show');
@@ -274,16 +276,16 @@
                 var content = "";
                 if (isSuccess) {
                     content = "" +
-                            '<div class="alert alert-success">' +
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            '操作完成' +
-                            '</div>';
+                        '<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '操作完成' +
+                        '</div>';
                 } else {
                     content = "" +
-                            '<div class="alert alert-danger">' +
-                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            errorMsg +
-                            '</div>';
+                        '<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        errorMsg +
+                        '</div>';
                 }
                 $("#myModal").modal('hide');
                 gridTable.ajax.reload(null, false);
@@ -292,10 +294,72 @@
             },
             error: function (data) {
                 var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
+                $("#msgInfo").html(errorContent);
+                $("#msgInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
+            }
+        });
+    }
+
+    function deleteInfo(id) {
+        <sec:ifNotGranted roles='ROLE_SUPER_ADMIN,ROLE_PROJECT_ADMIN'>
+        alert("权限限制，请联系管理员添加权限。");
+        return;
+        </sec:ifNotGranted>
+        var content = "" +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" data-dismiss="modal">×</button>' +
+            '<h3>提示</h3>' +
+            '</div>' +
+            '<div class="modal-body">' +
+            '<p>此操作将删除项目所有资料、数据并且不可恢复，是否继续?</p>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+            '<a href="#" class="btn btn-default" data-dismiss="modal">取消</a>' +
+            '<a href="javascript:postAjaxDelete('+id+');" class="btn btn-primary">删除</a>' +
+            '</div>';
+        $("#modal-content").html("");
+        $("#modal-content").html(content);
+        $('#myModal').modal('show');
+    }
+
+    function postAjaxDelete(id) {
+        var url = '${createLink(controller: "project", action: "remove")}/' + id;
+        $.ajax({
+            type: "DELETE",
+            dataType: "json",
+            url: url,
+            success: function (result) {
+                var isSuccess = result.success;
+                var errorMsg = result.msg;
+                var content = "";
+                if (isSuccess) {
+                    content = "" +
+                        '<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                        '操作完成' +
+                        '</div>';
+                } else {
+                    content = "" +
                         '<div class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                        data.responseText +
+                        errorMsg +
                         '</div>';
+                }
+                $("#myModal").modal('hide');
+                gridTable.ajax.reload(null, false);
+                $("#msgInfo").html(content);
+                $("#msgInfo").html(content).fadeIn(300).delay(2000).fadeOut(300);
+            },
+            error: function (data) {
+                var errorContent = "" +
+                    '<div class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                    data.responseText +
+                    '</div>';
                 $("#msgInfo").html(errorContent);
                 $("#msgInfo").html(errorContent).fadeIn(300).delay(2000).fadeOut(300);
             }

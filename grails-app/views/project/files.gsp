@@ -55,7 +55,7 @@
             "serverSide": true,
             "bAutoWidth": true,
             "ajax": {
-                "url":"projectTaskData/listFiles",
+                "url":"projectTaskData/listFiles?projectId=${projectId}",
                 "dataSrc": "data",
                 "data": function ( d ) {
                     //添加额外的参数传给服务器

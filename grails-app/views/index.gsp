@@ -108,6 +108,7 @@
                                 <li><a class="ajax-link" href="${createLink(uri: '/systemRole')}">角色设置</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/systemUserRole')}">权限设置</a></li>
                                 <li><a class="ajax-link" href="${createLink(uri: '/systemLog')}">系统日志</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/backupRecorder')}">系统备份</a></li>
                             </ul>
                         </li>
                         </sec:access>
@@ -143,7 +144,8 @@
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> 项目资料</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a class="ajax-link" href="${createLink(uri: '/project/files')}">项目资料</a></li>
+                                <li><a class="ajax-link" href="${createLink(uri: '/project/files?projectId=0')}">全部项目资料</a></li>
+                                <g:include controller="project" action="menus" />
                             </ul>
                         </li>
                     </ul>

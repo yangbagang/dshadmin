@@ -1,5 +1,6 @@
 package com.ybg.dsh.pm
 
+import com.ybg.dsh.utils.NetUtil
 import com.ybg.dsh.vo.AjaxPagingVo
 import com.ybg.dsh.wf.FlowDefinition
 import grails.converters.JSON
@@ -13,6 +14,10 @@ class ProjectController {
     def springSecurityService
 
     def projectFlowService
+
+    def projectService
+
+    def systemLogService
 
     def index() {
         //默认首页
@@ -177,6 +182,7 @@ class ProjectController {
         }
 
         project.save flush:true
+        systemLogService.addLog("${user.username}", "项目${project.name}编辑", NetUtil.getUserIP(request), "项目")
 
         result.success = true
         result.msg = ""
@@ -213,6 +219,31 @@ class ProjectController {
 
         def user = springSecurityService.currentUser
         projectFlowService.stop(user, project)
+        systemLogService.addLog("${user.username}", "项目${project.name}终止", NetUtil.getUserIP(request), "项目")
+
+        result.success = true
+        result.msg = ""
+        render result as JSON
+    }
+
+    /**
+     * 彻底删除
+     * @param project
+     * @return
+     */
+    def remove(Project project) {
+        def result = [:]
+        if (project == null) {
+            result.success = false
+            result.msg = "project is null."
+            render result as JSON
+            return
+        }
+
+        def user = springSecurityService.currentUser
+        projectService.removeInfo(project)
+
+        systemLogService.addLog("${user.username}", "项目${project.name}删除", NetUtil.getUserIP(request), "项目")
 
         result.success = true
         result.msg = ""
@@ -242,14 +273,16 @@ class ProjectController {
 
         def user = springSecurityService.currentUser
         projectFlowService.start(user, project)
+        systemLogService.addLog("${user.username}", "项目${project.name}启动", NetUtil.getUserIP(request), "项目")
 
         result.success = true
         result.msg = ""
         render result as JSON
     }
 
-    def files() {
+    def files(Long projectId) {
         //转向文档下载界面
+        [projectId: projectId]
     }
 
     def latest() {
@@ -273,5 +306,11 @@ class ProjectController {
         def project = Project.read(projectId)
         def taskIds = projectFlowService.viewFlow(project)
         [project: project, taskIds: taskIds]
+    }
+
+    def menus() {
+        def list1 = Project.findAllByStatus(1)//进行中
+        def list2 = Project.findAllByStatus(2)//己完成
+        [list1: list1, list2: list2]
     }
 }
