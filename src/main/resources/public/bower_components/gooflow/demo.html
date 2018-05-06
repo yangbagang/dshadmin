@@ -7,17 +7,17 @@
 <?import namespace="v" implementation="#default#VML" ?>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="default.css"/>
-<link rel="stylesheet" type="text/css" href="../codebase/fonts/iconflow.css"/>
-<link rel="stylesheet" type="text/css" href="../codebase/GooFlow.css"/>
-<script type="text/javascript" src="data2.js"></script>
-<script type="text/javascript" src="../plugin/jquery.min.js"></script>
-<script type="text/javascript" src="../codebase/GooFunc.js"></script>
-<script type="text/javascript" src="../plugin/json2.js"></script>
-<script type="text/javascript" src="../plugin/printThis.js"></script>
+<link rel="stylesheet" type="text/css" href="./fonts/iconflow.css"/>
+<link rel="stylesheet" type="text/css" href="./css/GooFlow.css"/>
+<script type="text/javascript" src="./js/data2.js"></script>
+<script type="text/javascript" src="./plugin/jquery.min.js"></script>
+<script type="text/javascript" src="./js/GooFunc.js"></script>
+<script type="text/javascript" src="./plugin/json2.js"></script>
+<script type="text/javascript" src="./plugin/printThis.js"></script>
 
-<script type="text/javascript" src="../codebase/GooFlow.js"></script>
-<script type="text/javascript" src="../codebase/GooFlow.color.js"></script>
-    <script type="text/javascript" src="../codebase/GooFlow.export.js"></script>
+<script type="text/javascript" src="./js/GooFlow.js"></script>
+<script type="text/javascript" src="./js/GooFlow.color.js"></script>
+<script type="text/javascript" src="./js/GooFlow.export.js"></script>
 <script type="text/javascript">
 var property={
 	toolBtns:["start round mix","end round","task","node","chat","state","plug","join","fork","complex mix"],
@@ -66,14 +66,14 @@ $(document).ready(function(){
     demo.onItemRightClick=function(id,type){
         console.log("onItemRightClick: "+id+","+type);
         return true;//返回false可以阻止浏览器默认的右键菜单事件
-    }
+    };
     demo.onItemDbClick=function(id,type){
         console.log("onItemDbClick: "+id+","+type);
         return true;//返回false可以阻止原组件自带的双击直接编辑事件
-    }
+    };
     demo.onPrintClick=function(){
         demo.print(0.8);
-    }
+    };
 });
 var out;
 function Export(){
@@ -91,8 +91,8 @@ window.onresize=function(){
 <div id="demo" style="width:100%;height:540px;"></div>
 请输入缩放值：<input type="text" id="scaleValue" value="0.5"/>
 <input id="scale" type="button" value='缩放' onclick="ResetScale()"/>
-<input id="submit" type="button" value='导出结果' onclick="Export()"/>
-<input id="submit" type="button" value='清空' onclick="demo.clearData()"/>
+<input id="submit1" type="button" value='导出结果' onclick="Export()"/>
+<input id="submit2" type="button" value='清空' onclick="demo.clearData()"/>
 <textarea id="result" row="6"></textarea>
 </body>
 </html>
