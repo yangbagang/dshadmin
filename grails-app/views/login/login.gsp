@@ -15,7 +15,6 @@
     <link href='${resource(dir: "bower_components/chosen", file: "chosen.min.css")}' rel='stylesheet'>
     <link href='${resource(dir: "bower_components/colorbox/example3", file: "colorbox.css")}' rel='stylesheet'>
     <link href='${resource(dir: "bower_components/responsive-tables", file: "responsive-tables.css")}' rel='stylesheet'>
-    <link href='${resource(dir: "bower_components/bootstrap-tour/build/css", file: "bootstrap-tour.min.css")}' rel='stylesheet'>
     <asset:stylesheet src="jquery.noty.css" />
     <asset:stylesheet src="noty_theme_default.css" />
     <asset:stylesheet src="elfinder.min.css" />
@@ -33,8 +32,33 @@
 
     <!-- The fav icon -->
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}">
+    <style>
+        .main-dev {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .carousel-inner .item img {
+            width: 100%;
+            height: 100%;
+        }
+        .login-header h2 {
+            color: #fefefe;
+        }
+    </style>
 </head>
 <body>
+<div id="myCarousel" class="carousel slide" style="position: absolute;left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 100%;">
+    <!-- 轮播（Carousel）项目 -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <asset:image src="login/login_1.jpg"/>
+        </div>
+        <div class="item">
+            <asset:image src="login/login_2.jpg" />
+        </div>
+    </div>
+</div>
 <div class="ch-container">
     <div class="row">
 
@@ -46,7 +70,7 @@
         </div><!--/row-->
 
         <div class="row">
-            <div class="well col-md-5 center login-box">
+            <div class="well col-md-5 center login-box" style="opacity:0.9;">
                 <g:if test="${flash.message}">
                 <div class="alert alert-info">
                     ${flash.message}
@@ -55,13 +79,13 @@
                 <g:form controller="login" action="auth" method="POST">
                     <fieldset>
                         <div class="input-group input-group-lg">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+                            <span class="input-group-addon" style="color: #5a5b82;"><i class="glyphicon glyphicon-user"></i></span>
                             <input type="text" name="username" class="form-control" placeholder="用户名">
                         </div>
                         <div class="clearfix"></div><br>
 
                         <div class="input-group input-group-lg">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
+                            <span class="input-group-addon" style="color: #5a5b82;"><i class="glyphicon glyphicon-lock"></i></span>
                             <input type="password" name="password" class="form-control" placeholder="密码">
                         </div>
                         <div class="clearfix"></div><br>
@@ -69,7 +93,7 @@
                         <g:if test="${jcaptcha.enabled &&
                             session.jcaptchaForLogin == null ? true : session.jcaptchaForLogin}">
                             <div class="input-group input-group-lg">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
+                                <span class="input-group-addon" style="color: #5a5b82;"><i class="glyphicon glyphicon-lock"></i></span>
                                 <input type="text" name="jcaptchaChallenge" class="form-control" placeholder="验证码">
                             </div>
                             <div class="clearfix"></div><br>
@@ -108,8 +132,6 @@
 <asset:javascript src="jquery.noty.js" />
 <!-- library for making tables responsive -->
 <script src="${resource(dir: "bower_components/responsive-tables", file: "responsive-tables.js")}"></script>
-<!-- tour plugin -->
-<script src="${resource(dir: "bower_components/bootstrap-tour/build/js", file: "bootstrap-tour.min.js")}"></script>
 <!-- star rating plugin -->
 <asset:javascript src="jquery.raty.min.js" />
 <!-- for iOS style toggle switch -->
@@ -150,6 +172,10 @@
             $("input[name='username']").eq(0).focus();
         }
     }
+
+    $('#myCarousel').carousel({
+        interval: 2000
+    })
 </script>
 </body>
 </html>

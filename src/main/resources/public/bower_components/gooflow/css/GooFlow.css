@@ -37,7 +37,7 @@ v\:group,v\:rect,v\:imagedata,v\:oval,v\:line,v\:polyline,v\:stroke,v\:textbox {
 
 .GooFlow_work{position:absolute;top:3px;right:3px;bottom:3px;left:3px;overflow:auto;background-color:#fff;}
 .GooFlow_work .GooFlow_work_inner{
-	background:url(img/gooflow_blank.gif)\0;
+	background:url(../img/gooflow_blank.gif)\0;
 	background: -webkit-linear-gradient(top, transparent 11px, #e3e3e3 12px),-webkit-linear-gradient(left, transparent 11px, #e3e3e3 12px);
     background: -moz-linear-gradient(top, transparent 11px, #e3e3e3 12px),-moz-linear-gradient(left, transparent 11px, #e3e3e3 12px);
     background: -o-linear-gradient(top, transparent 11px, #e3e3e3 12px),-o-linear-gradient(left, transparent 11px, #e3e3e3 12px);
@@ -146,11 +146,11 @@ v\:group,v\:rect,v\:imagedata,v\:oval,v\:line,v\:polyline,v\:stroke,v\:textbox {
 
 /*以下为图标样式（固定大小18px*18px，矢量字体大小16px），用户可自定义扩展自己的新矢量图标字体，写法参照以下的内容*/
 @font-face {font-family: "iconflow";
-  src: url('fonts/iconflow.eot?t=1494321407539'); /* IE9*/
-  src: url('fonts/iconflow.eot?t=1494321407539#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('fonts/iconflow.woff?t=1494321407539') format('woff'), /* chrome, firefox */
-  url('fonts/iconflow.ttf?t=1494321407539') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('fonts/iconflow.svg?t=1494321407539#iconflow') format('svg'); /* iOS 4.1- */
+  src: url('../fonts/iconflow.eot?t=1494321407539'); /* IE9*/
+  src: url('../fonts/iconflow.eot?t=1494321407539#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/iconflow.woff?t=1494321407539') format('woff'), /* chrome, firefox */
+  url('../fonts/iconflow.ttf?t=1494321407539') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../fonts/iconflow.svg?t=1494321407539#iconflow') format('svg'); /* iOS 4.1- */
 }
 
 .GooFlow_area i,.GooFlow .GooFlow_line_oper i,

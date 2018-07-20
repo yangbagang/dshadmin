@@ -156,6 +156,7 @@ select {
     font-weight: bold;
     margin-top: 0;
     margin-bottom: 0;
+    color: #444572;
 }
 
 .box-header h3 {
@@ -387,7 +388,7 @@ ul.ajax-loaders {
     margin-top: 10px;
     height: 15px;
     width: 128px;
-    background: url(../img/ajax-loaders/ajax-loader-6.gif);
+    background: url(../images/ajax-loaders/ajax-loader-6.gif);
 }
 
 .box-content .nav-tabs {
@@ -442,10 +443,6 @@ ul.ajax-loaders {
     min-height: 297px;
 }
 
-.main-menu > li > a {
-    border: 1px solid rgba(221, 221, 221, 0.46);
-}
-
 .main-menu > li {
     margin-top: 0 !important;
 }
@@ -456,7 +453,7 @@ ul.ajax-loaders {
     font-size: 11px;
     font-weight: bold;
     line-height: 18px;
-    color: #999999;
+    color: #fefefe;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
 }

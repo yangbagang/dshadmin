@@ -24,7 +24,7 @@
     <div class="box-content">
         <ul class="nav nav-tabs" id="projectTab">
             <g:each in="${projectList}" var="project" status="i">
-                <li><a href="javascript:changeTabContent(${i}, ${project.id});">${project.name}</a></li>
+                <li><a href="javascript:changeTabContent(${i}, ${project.id});" style="color: #444572;">${project.name}</a></li>
             </g:each>
         </ul>
         <div id="projectTabContent" class="tab-content">

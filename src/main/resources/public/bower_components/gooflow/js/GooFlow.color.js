@@ -2,14 +2,14 @@
  * 全局的控件颜色自定义设置
  */
 GooFlow.prototype.color={
-    main:"#20A0FF",
-    font:"#15428B",
-    node:"#C0CCDA",
+    main:"#444572",
+    font:"#444572",
+    node:"#d5d5e4",
     line:"#1D8CE0",
     lineFont:"#ff6600",
     mark:"#ff8800",
-    mix:"#B6F700",
-    mixFont:"#777"
+    mix:"#476bf2",
+    mixFont:"#fff"
 };
 /**
  * 1.3版本新增的控件操作按钮的title提示设置

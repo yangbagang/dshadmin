@@ -360,7 +360,7 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {
         "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
         "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
     };
-}
+};
 $.extend($.fn.dataTableExt.oPagination, {
     "bootstrap": {
         "fnInit": function (oSettings, nPaging, fnDraw) {

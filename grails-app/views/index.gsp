@@ -15,7 +15,6 @@
     <link href='${resource(dir: "bower_components/chosen", file: "chosen.min.css")}' rel='stylesheet'>
     <link href='${resource(dir: "bower_components/colorbox/example3", file: "colorbox.css")}' rel='stylesheet'>
     <link href='${resource(dir: "bower_components/responsive-tables", file: "responsive-tables.css")}' rel='stylesheet'>
-    <link href='${resource(dir: "bower_components/bootstrap-tour/build/css", file: "bootstrap-tour.min.css")}' rel='stylesheet'>
     <asset:stylesheet src="jquery.noty.css" />
     <asset:stylesheet src="noty_theme_default.css" />
     <asset:stylesheet src="elfinder.min.css" />
@@ -34,6 +33,23 @@
 
     <!-- The fav icon -->
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}">
+    <style>
+        .main-menu {
+            background-color: #444572;
+        }
+        .main-menu li:not(.nav-header) {
+            background-color: #535484;
+        }
+        .main-menu li:hover {
+            margin-left: 8px;
+        }
+        .ajax-link {
+            color: #fefefe;
+        }
+        .accordion a {
+            color: #fefefe;
+        }
+    </style>
 </head>
 <body>
 <!-- topbar starts -->
@@ -198,8 +214,6 @@
 <asset:javascript src="jquery.noty.js" />
 <!-- library for making tables responsive -->
 <script src="${resource(dir: "bower_components/responsive-tables", file: "responsive-tables.js")}"></script>
-<!-- tour plugin -->
-<script src="${resource(dir: "bower_components/bootstrap-tour/build/js", file: "bootstrap-tour.min.js")}"></script>
 <!-- star rating plugin -->
 <asset:javascript src="jquery.raty.min.js" />
 <!-- for iOS style toggle switch -->
