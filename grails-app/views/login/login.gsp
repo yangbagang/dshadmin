@@ -40,14 +40,14 @@
         }
         .carousel-inner .item img {
             width: 100%;
-            height: 100%;
+            height: 100vh;
         }
         .login-header h2 {
             color: #fefefe;
         }
     </style>
 </head>
-<body>
+<body style="overflow: hidden;">
 <div id="myCarousel" class="carousel slide" style="position: absolute;left: 0;right: 0;top: 0;bottom: 0;width: 100%;height: 100%;">
     <!-- 轮播（Carousel）项目 -->
     <div class="carousel-inner">
