@@ -91,7 +91,7 @@ class ProjectTaskDataController {
         def project = Project.get(projectId)
         def c = ProjectTaskData.createCriteria()
         def name = params.name ?: ""
-        def data = c.list(params) {
+        def data = c.list(offset: params.start, max: params.length) {
             and {
                 eq("type", "file")
                 gt("fileSize", 0L)
@@ -112,7 +112,7 @@ class ProjectTaskDataController {
         result.error = ""
         result.success = true
         result.recordsTotal = data.totalCount
-        result.recordsFiltered = data.size()
+        result.recordsFiltered = data.totalCount
         render result as JSON
     }
 
